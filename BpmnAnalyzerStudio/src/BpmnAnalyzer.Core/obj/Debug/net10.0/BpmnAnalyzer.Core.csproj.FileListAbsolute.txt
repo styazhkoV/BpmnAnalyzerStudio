@@ -1,7 +1,6 @@
 /Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/bin/Debug/net10.0/BpmnAnalyzer.Core.deps.json
 /Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/bin/Debug/net10.0/BpmnAnalyzer.Core.dll
 /Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/bin/Debug/net10.0/BpmnAnalyzer.Core.pdb
-/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Debug/net10.0/BpmnAnalyzer.Core.csproj.AssemblyReference.cache
 /Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Debug/net10.0/BpmnAnalyzer.Core.GeneratedMSBuildEditorConfig.editorconfig
 /Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Debug/net10.0/BpmnAnalyzer.Core.AssemblyInfoInputs.cache
 /Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Debug/net10.0/BpmnAnalyzer.Core.AssemblyInfo.cs

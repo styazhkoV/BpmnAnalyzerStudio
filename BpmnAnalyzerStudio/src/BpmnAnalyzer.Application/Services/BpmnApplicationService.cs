@@ -1,11 +1,13 @@
 using BpmnAnalyzer.Application.Adapters;
 using BpmnAnalyzer.Application.Models;
-using BpmnAnalyzer.Core.Parser;
+using BpmnAnalyzer.Application.Ports;
 using BpmnAnalyzer.Core.Validation;
 
 namespace BpmnAnalyzer.Application.Services;
 
 public sealed class BpmnApplicationService(
+    IProcessParser processParser,
+    BpmnValidator validator,
     IBrdDocxGeneratorAdapter brdDocxGenerator,
     IFileStorageAdapter fileStorage)
 {
@@ -13,8 +15,8 @@ public sealed class BpmnApplicationService(
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(xml);
 
-        var model = new BpmnXmlParser().Parse(xml);
-        var errors = new BpmnValidator().Validate(model)
+        var model = processParser.Parse(xml);
+        var errors = validator.Validate(model)
             .Select(error => new BpmnValidationIssue(error.ElementId, error.RuleCode, error.Message))
             .ToArray();
 
@@ -32,7 +34,7 @@ public sealed class BpmnApplicationService(
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(xml);
 
-        var model = new BpmnXmlParser().Parse(xml);
+        var model = processParser.Parse(xml);
         var desktopDirectory = fileStorage.DesktopDirectory;
         if (string.IsNullOrWhiteSpace(desktopDirectory))
         {

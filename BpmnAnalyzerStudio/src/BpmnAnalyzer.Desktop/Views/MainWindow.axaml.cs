@@ -1,11 +1,13 @@
 // src/BpmnAnalyzer.Desktop/Views/MainWindow.axaml.cs
 using Avalonia.Controls;
+using BpmnAnalyzer.Application.Contracts;
 using BpmnAnalyzer.Application.Services;
+using BpmnAnalyzer.Core.Validation;
+using BpmnAnalyzer.Infrastructure.Adapters;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using BpmnAnalyzer.Desktop.ViewModels;
 
 namespace BpmnAnalyzer.Desktop.Views;
@@ -13,11 +15,6 @@ namespace BpmnAnalyzer.Desktop.Views;
 public partial class MainWindow : Window
 {
     private BpmnApplicationService? _bpmnApplicationService;
-
-    private static readonly JsonSerializerOptions MessageJsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true
-    };
 
     public MainWindow()
     {
@@ -77,8 +74,7 @@ public partial class MainWindow : Window
                 throw new InvalidOperationException("Получено пустое сообщение от редактора.");
             }
 
-            var request = JsonSerializer.Deserialize<BackendRequest>(messageBody, MessageJsonOptions)
-                ?? throw new InvalidOperationException("Получен пустой запрос от редактора.");
+            var request = WebViewBackendProtocol.DeserializeRequest(messageBody);
             requestId = request.Id;
 
             if (string.IsNullOrWhiteSpace(request.Id) || string.IsNullOrWhiteSpace(request.Xml))
@@ -146,12 +142,7 @@ public partial class MainWindow : Window
         object? result,
         string? error)
     {
-        var response = JsonSerializer.Serialize(new { id, ok, result, error });
+        var response = WebViewBackendProtocol.SerializeResponse(new WebViewBackendResponse(id, ok, result, error));
         await BpmnWebView.InvokeScript($"window.onBackendResponse({response})");
     }
-
-    private sealed record BackendRequest(
-        [property: JsonPropertyName("id")] string Id,
-        [property: JsonPropertyName("action")] string Action,
-        [property: JsonPropertyName("xml")] string Xml);
 }

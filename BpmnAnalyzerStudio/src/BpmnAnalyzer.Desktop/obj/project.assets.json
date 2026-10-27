@@ -689,18 +689,42 @@
           }
         }
       },
-      "BpmnAnalyzer.Core/1.0.0": {
+      "BpmnAnalyzer.Application/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
-          "DocumentFormat.OpenXml": "3.0.2",
-          "System.IO.Packaging": "8.0.1"
+          "BpmnAnalyzer.Core": "1.0.0"
         },
+        "compile": {
+          "bin/placeholder/BpmnAnalyzer.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BpmnAnalyzer.Application.dll": {}
+        }
+      },
+      "BpmnAnalyzer.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
         "compile": {
           "bin/placeholder/BpmnAnalyzer.Core.dll": {}
         },
         "runtime": {
           "bin/placeholder/BpmnAnalyzer.Core.dll": {}
+        }
+      },
+      "BpmnAnalyzer.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "BpmnAnalyzer.Application": "1.0.0",
+          "DocumentFormat.OpenXml": "3.0.2",
+          "System.IO.Packaging": "8.0.1"
+        },
+        "compile": {
+          "bin/placeholder/BpmnAnalyzer.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BpmnAnalyzer.Infrastructure.dll": {}
         }
       }
     }
@@ -1619,10 +1643,20 @@
         "tmds.dbus.protocol.nuspec"
       ]
     },
+    "BpmnAnalyzer.Application/1.0.0": {
+      "type": "project",
+      "path": "../BpmnAnalyzer.Application/BpmnAnalyzer.Application.csproj",
+      "msbuildProject": "../BpmnAnalyzer.Application/BpmnAnalyzer.Application.csproj"
+    },
     "BpmnAnalyzer.Core/1.0.0": {
       "type": "project",
       "path": "../BpmnAnalyzer.Core/BpmnAnalyzer.Core.csproj",
       "msbuildProject": "../BpmnAnalyzer.Core/BpmnAnalyzer.Core.csproj"
+    },
+    "BpmnAnalyzer.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../BpmnAnalyzer.Infrastructure/BpmnAnalyzer.Infrastructure.csproj",
+      "msbuildProject": "../BpmnAnalyzer.Infrastructure/BpmnAnalyzer.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -1632,7 +1666,9 @@
       "Avalonia.Desktop >= 12.1.4",
       "Avalonia.Fonts.Inter >= 12.1.4",
       "Avalonia.Themes.Fluent >= 12.1.4",
+      "BpmnAnalyzer.Application >= 1.0.0",
       "BpmnAnalyzer.Core >= 1.0.0",
+      "BpmnAnalyzer.Infrastructure >= 1.0.0",
       "CommunityToolkit.Mvvm >= 8.2.2"
     ]
   },
@@ -1663,8 +1699,14 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
+            "/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/BpmnAnalyzer.Application.csproj": {
+              "projectPath": "/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/BpmnAnalyzer.Application.csproj"
+            },
             "/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/BpmnAnalyzer.Core.csproj": {
               "projectPath": "/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/BpmnAnalyzer.Core.csproj"
+            },
+            "/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Infrastructure/BpmnAnalyzer.Infrastructure.csproj": {
+              "projectPath": "/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Infrastructure/BpmnAnalyzer.Infrastructure.csproj"
             }
           }
         }

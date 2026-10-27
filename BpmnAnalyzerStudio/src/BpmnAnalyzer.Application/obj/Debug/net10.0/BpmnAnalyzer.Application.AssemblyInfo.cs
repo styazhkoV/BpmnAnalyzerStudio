@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BpmnAnalyzer.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f60c6ceb03d71d4c5671c5814866966b85b59340")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7b8110dd0866f1e66e13906f5eb481080df056a3")]
 [assembly: System.Reflection.AssemblyProductAttribute("BpmnAnalyzer.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BpmnAnalyzer.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

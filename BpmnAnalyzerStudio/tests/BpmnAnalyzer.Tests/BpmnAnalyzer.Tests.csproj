@@ -21,7 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\BpmnAnalyzer.Application\BpmnAnalyzer.Application.csproj" />
     <ProjectReference Include="..\..\src\BpmnAnalyzer.Core\BpmnAnalyzer.Core.csproj" />
+    <ProjectReference Include="..\..\src\BpmnAnalyzer.Infrastructure\BpmnAnalyzer.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

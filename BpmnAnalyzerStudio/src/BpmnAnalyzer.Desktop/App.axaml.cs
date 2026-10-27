@@ -2,9 +2,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using BpmnAnalyzer.Application.Services;
+using BpmnAnalyzer.Core.Validation;
 using BpmnAnalyzer.Desktop.Views;
 using BpmnAnalyzer.Desktop.ViewModels;
-using BpmnAnalyzer.Application.Services;
 using BpmnAnalyzer.Infrastructure.Adapters;
 
 namespace BpmnAnalyzer.Desktop;
@@ -20,15 +21,12 @@ public partial class App : Avalonia.Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var fileStorage = new LocalFileStorageAdapter();
             var bpmnApplicationService = new BpmnApplicationService(
+                new BpmnXmlParserAdapter(),
+                new BpmnValidator(),
                 new BrdDocxGeneratorAdapter(),
-                fileStorage);
-            var notebookApplicationService = new NotebookApplicationService(
-                fileStorage,
-                new NoteDocxGeneratorAdapter());
-            var viewModel = new MainViewModel(bpmnApplicationService, notebookApplicationService);
-
+                new LocalFileStorageAdapter());
+            var viewModel = new MainViewModel();
             var mainWindow = new MainWindow();
             mainWindow.Configure(bpmnApplicationService, viewModel);
             desktop.MainWindow = mainWindow;

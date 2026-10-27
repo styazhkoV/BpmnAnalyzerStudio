@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "IZwXwxKZA4A=",
+  "dgSpecHash": "x3zs0l17oFI=",
   "success": true,
   "projectFilePath": "/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Infrastructure/BpmnAnalyzer.Infrastructure.csproj",
   "expectedPackageFiles": [
-    "/Users/alexsnow/.nuget/packages/documentformat.openxml/3.0.2/documentformat.openxml.3.0.2.nupkg.sha512",
-    "/Users/alexsnow/.nuget/packages/documentformat.openxml.framework/3.0.2/documentformat.openxml.framework.3.0.2.nupkg.sha512",
-    "/Users/alexsnow/.nuget/packages/system.io.packaging/8.0.1/system.io.packaging.8.0.1.nupkg.sha512"
+    "/tmp/.nuget/packages/documentformat.openxml/3.0.2/documentformat.openxml.3.0.2.nupkg.sha512",
+    "/tmp/.nuget/packages/documentformat.openxml.framework/3.0.2/documentformat.openxml.framework.3.0.2.nupkg.sha512",
+    "/tmp/.nuget/packages/system.io.packaging/8.0.1/system.io.packaging.8.0.1.nupkg.sha512"
   ],
   "logs": []
 }
