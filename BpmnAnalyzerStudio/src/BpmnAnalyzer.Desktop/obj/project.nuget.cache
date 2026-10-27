@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "+IfnBPm5GFw=",
+  "dgSpecHash": "Y4m8d2vOAS8=",
   "success": true,
   "projectFilePath": "/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/BpmnAnalyzer.Desktop.csproj",
   "expectedPackageFiles": [
@@ -34,10 +34,7 @@
     "/Users/alexsnow/.nuget/packages/skiasharp.nativeassets.webassembly/3.119.4/skiasharp.nativeassets.webassembly.3.119.4.nupkg.sha512",
     "/Users/alexsnow/.nuget/packages/skiasharp.nativeassets.win32/3.119.4/skiasharp.nativeassets.win32.3.119.4.nupkg.sha512",
     "/Users/alexsnow/.nuget/packages/system.io.packaging/8.0.1/system.io.packaging.8.0.1.nupkg.sha512",
-    "/Users/alexsnow/.nuget/packages/tmds.dbus.protocol/0.94.1/tmds.dbus.protocol.0.94.1.nupkg.sha512",
-    "/Users/alexsnow/.nuget/packages/microsoft.netcore.app.runtime.osx-x64/10.0.12/microsoft.netcore.app.runtime.osx-x64.10.0.12.nupkg.sha512",
-    "/Users/alexsnow/.nuget/packages/microsoft.aspnetcore.app.runtime.osx-x64/10.0.12/microsoft.aspnetcore.app.runtime.osx-x64.10.0.12.nupkg.sha512",
-    "/Users/alexsnow/.nuget/packages/microsoft.netcore.app.host.osx-x64/10.0.12/microsoft.netcore.app.host.osx-x64.10.0.12.nupkg.sha512"
+    "/Users/alexsnow/.nuget/packages/tmds.dbus.protocol/0.94.1/tmds.dbus.protocol.0.94.1.nupkg.sha512"
   ],
   "logs": []
 }

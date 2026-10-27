@@ -1,14 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "+v3xA0/rmI8=",
+  "dgSpecHash": "R//vn/yirJ4=",
   "success": true,
   "projectFilePath": "/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/BpmnAnalyzer.Core.csproj",
   "expectedPackageFiles": [
     "/Users/alexsnow/.nuget/packages/documentformat.openxml/3.0.2/documentformat.openxml.3.0.2.nupkg.sha512",
     "/Users/alexsnow/.nuget/packages/documentformat.openxml.framework/3.0.2/documentformat.openxml.framework.3.0.2.nupkg.sha512",
-    "/Users/alexsnow/.nuget/packages/system.io.packaging/8.0.1/system.io.packaging.8.0.1.nupkg.sha512",
-    "/Users/alexsnow/.nuget/packages/microsoft.netcore.app.runtime.osx-x64/10.0.12/microsoft.netcore.app.runtime.osx-x64.10.0.12.nupkg.sha512",
-    "/Users/alexsnow/.nuget/packages/microsoft.aspnetcore.app.runtime.osx-x64/10.0.12/microsoft.aspnetcore.app.runtime.osx-x64.10.0.12.nupkg.sha512"
+    "/Users/alexsnow/.nuget/packages/system.io.packaging/8.0.1/system.io.packaging.8.0.1.nupkg.sha512"
   ],
   "logs": []
 }
