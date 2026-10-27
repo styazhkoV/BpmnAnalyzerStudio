@@ -1,0 +1,558 @@
+:root {
+  --bg: #0f1419;
+  --surface: #1a2332;
+  --surface2: #243044;
+  --border: #2d3a4f;
+  --text: #e7ecf3;
+  --muted: #8b9bb4;
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --radius: 8px;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  display: grid;
+  grid-template-rows: 56px 1fr;
+  grid-template-columns: 1fr 280px;
+  height: 100vh;
+}
+
+.header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+.logo-icon { color: var(--primary); font-size: 1.4rem; }
+.logo small {
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-left: 4px;
+}
+
+.tabs { display: flex; gap: 4px; }
+.tab {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.15s;
+}
+.tab:hover { background: var(--surface2); color: var(--text); }
+.tab.active { background: var(--primary); color: white; }
+
+.actions { margin-left: auto; display: flex; gap: 8px; }
+
+.btn, .btn-sm {
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: 0.15s;
+}
+.btn {
+  padding: 8px 16px;
+  background: var(--surface2);
+  color: var(--text);
+}
+.btn:hover { background: var(--border); }
+.btn.primary { background: var(--primary); color: white; }
+.btn.primary:hover { background: var(--primary-hover); }
+.btn.secondary { background: transparent; border: 1px solid var(--border); }
+.btn-sm {
+  padding: 5px 10px;
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 0.8rem;
+}
+.btn-sm:hover { background: var(--border); }
+
+.main {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.panel {
+  display: none;
+  height: 100%;
+  flex-direction: column;
+}
+.panel.active { display: flex; }
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.toolbar-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 4px;
+}
+.hint { color: var(--muted); font-size: 0.8rem; margin-left: 8px; }
+
+.canvas {
+  flex: 1;
+  background: #1e2a3a;
+}
+
+.djs-container { background: #1e2a3a !important; }
+.bjs-powered-by { display: none !important; }
+
+/* =========================================================
+   Стилизация элементов bpmn-js (палитра, контекст-пад, схема)
+   ========================================================= */
+
+/* ---- Палитра слева ---- */
+.djs-palette {
+  background: #1a2332 !important;
+  border: 1px solid #2d3a4f !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
+.djs-palette .separator {
+  border-color: #2d3a4f !important;
+}
+.djs-palette .entry {
+  color: #4ade80 !important;
+  fill: #4ade80 !important;
+  border-radius: 6px !important;
+  opacity: 1 !important;
+}
+.djs-palette .entry:hover {
+  color: #bbf7d0 !important;
+  fill: #bbf7d0 !important;
+  background: rgba(74, 222, 128, 0.18) !important;
+}
+.djs-palette .entry img,
+.djs-palette .entry svg {
+  opacity: 1 !important;
+  filter: invert(72%) sepia(40%) saturate(600%) hue-rotate(80deg) brightness(1.15) !important;
+}
+
+/* ---- Контекстное меню у выбранного элемента ---- */
+.djs-context-pad {
+  background: transparent !important;
+}
+.djs-context-pad .group {
+  background: #1a2332 !important;
+  border: 1px solid #2d3a4f !important;
+  border-radius: 10px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45) !important;
+  padding: 5px !important;
+  gap: 3px !important;
+}
+.djs-context-pad .entry {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 8px !important;
+  background: rgba(74, 222, 128, 0.14) !important;
+  border: 1px solid rgba(74, 222, 128, 0.25) !important;
+  color: #4ade80 !important;
+  fill: #4ade80 !important;
+  opacity: 1 !important;
+  transition: background 0.15s, border-color 0.15s, transform 0.12s !important;
+}
+.djs-context-pad .entry:hover {
+  background: rgba(74, 222, 128, 0.4) !important;
+  border-color: #4ade80 !important;
+  color: #bbf7d0 !important;
+  fill: #bbf7d0 !important;
+  transform: scale(1.1);
+}
+/* Иконки: img / svg / фон */
+.djs-context-pad .entry img,
+.djs-context-pad .entry svg {
+  opacity: 1 !important;
+  filter: invert(72%) sepia(40%) saturate(600%) hue-rotate(80deg) brightness(1.2) !important;
+}
+.djs-context-pad .entry::before {
+  opacity: 1 !important;
+  filter: invert(72%) sepia(40%) saturate(600%) hue-rotate(80deg) brightness(1.2) !important;
+}
+
+/* ---- Popup (выбор типа задачи, события и т.д.) ---- */
+.djs-popup,
+.djs-popup-body {
+  background: #1a2332 !important;
+  border: 1px solid #2d3a4f !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5) !important;
+  color: #e7ecf3 !important;
+}
+.djs-popup .entry {
+  color: #4ade80 !important;
+  border-radius: 6px !important;
+}
+.djs-popup .entry:hover {
+  background: rgba(74, 222, 128, 0.2) !important;
+  color: #bbf7d0 !important;
+}
+.djs-popup .entry img,
+.djs-popup .entry svg {
+  filter: invert(72%) sepia(40%) saturate(600%) hue-rotate(80deg) brightness(1.15) !important;
+}
+
+/* ---- Выделение элементов на схеме ---- */
+/* Обычный hover */
+.djs-shape:hover .djs-outline,
+.djs-connection:hover .djs-outline {
+  stroke: rgba(74, 222, 128, 0.5) !important;
+}
+/* Выбранный элемент */
+.djs-element.selected .djs-outline {
+  stroke: #4ade80 !important;
+  stroke-width: 2px !important;
+  stroke-dasharray: none !important;
+}
+/* Маркеры соединения (точки на краях) */
+.djs-connect-ok .djs-visual > :nth-child(1) {
+  stroke: #4ade80 !important;
+  fill: rgba(74, 222, 128, 0.15) !important;
+}
+.djs-connect-not-ok .djs-visual > :nth-child(1) {
+  stroke: #ef4444 !important;
+}
+
+/* Подписи элементов */
+.djs-label {
+  fill: #e7ecf3 !important;
+}
+.djs-label text {
+  fill: #e7ecf3 !important;
+}
+
+/* Ручки изменения размера */
+.djs-resizer-n, .djs-resizer-s, .djs-resizer-e, .djs-resizer-w,
+.djs-resizer-nw, .djs-resizer-ne, .djs-resizer-sw, .djs-resizer-se {
+  fill: #4ade80 !important;
+  stroke: #166534 !important;
+}
+
+.notepad-toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+}
+.notepad-toolbar select {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 5px 10px;
+  font-size: 0.85rem;
+}
+.notepad {
+  flex: 1;
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  border: none;
+  padding: 20px 24px;
+  font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+}
+
+.validation-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.validation-header h2 { font-size: 1.1rem; }
+.badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  background: var(--surface2);
+}
+.badge.ok { background: rgba(34,197,94,0.2); color: var(--success); }
+.badge.error { background: rgba(239,68,68,0.2); color: var(--danger); }
+.badge.warn { background: rgba(245,158,11,0.2); color: var(--warning); }
+
+.validation-list {
+  padding: 12px 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+.validation-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border-left: 3px solid var(--border);
+}
+.validation-item.error { border-left-color: var(--danger); }
+.validation-item.warning { border-left-color: var(--warning); }
+.validation-item .icon { font-size: 1.1rem; }
+.validation-item .msg { flex: 1; }
+.validation-item .elem { color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
+.empty { color: var(--muted); padding: 24px; text-align: center; }
+
+.properties {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 16px;
+  overflow-y: auto;
+}
+.properties h3 {
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.muted { color: var(--muted); font-size: 0.9rem; }
+
+.prop-group { margin-bottom: 16px; }
+.prop-group label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+.prop-group input,
+.prop-group textarea,
+.prop-group select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  padding: 6px 8px;
+  font-size: 0.85rem;
+}
+.prop-group textarea { min-height: 60px; resize: vertical; }
+.prop-group input:focus,
+.prop-group textarea:focus { outline: 1px solid var(--primary); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* ---------- Подсветка проблемных элементов на canvas ---------- */
+
+/* Ошибка — красная обводка + лёгкая заливка */
+.djs-element.ap-error > .djs-visual > :nth-child(1) {
+  stroke: #ef4444 !important;
+  stroke-width: 3px !important;
+  fill: rgba(239, 68, 68, 0.12) !important;
+}
+
+/* Предупреждение — янтарная обводка */
+.djs-element.ap-warning > .djs-visual > :nth-child(1) {
+  stroke: #f59e0b !important;
+  stroke-width: 2.5px !important;
+  fill: rgba(245, 158, 11, 0.10) !important;
+}
+
+/* Пульсация для ошибок, чтобы сразу бросалось в глаза */
+@keyframes ap-pulse-error {
+  0%, 100% { stroke-opacity: 1; }
+  50%      { stroke-opacity: 0.45; }
+}
+.djs-element.ap-error > .djs-visual > :nth-child(1) {
+  animation: ap-pulse-error 1.6s ease-in-out infinite;
+}
+
+/* Кликабельные пункты в списке валидации */
+.validation-item.clickable {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.validation-item.clickable:hover {
+  background: var(--surface2);
+}
+.validation-item .elem {
+  opacity: 0.85;
+}
+
+/* ---- Анимация токена ---- */
+.btn-animate {
+  background: rgba(74, 222, 128, 0.2) !important;
+  color: #4ade80 !important;
+  border: 1px solid rgba(74, 222, 128, 0.4);
+}
+.btn-animate:hover {
+  background: rgba(74, 222, 128, 0.35) !important;
+}
+
+.djs-element.ap-token-active > .djs-visual > :nth-child(1) {
+  stroke: #4ade80 !important;
+  stroke-width: 3px !important;
+  fill: rgba(74, 222, 128, 0.25) !important;
+  animation: ap-token-pulse 0.8s ease-in-out infinite;
+}
+@keyframes ap-token-pulse {
+  0%, 100% { stroke-opacity: 1; filter: drop-shadow(0 0 4px #4ade80); }
+  50%      { stroke-opacity: 0.6; filter: drop-shadow(0 0 12px #4ade80); }
+}
+
+.djs-element.ap-token-done > .djs-visual > :nth-child(1) {
+  stroke: #22c55e !important;
+  stroke-width: 2px !important;
+  fill: rgba(34, 197, 94, 0.12) !important;
+}
+
+.djs-element.ap-token-flow > .djs-visual > :nth-child(1) {
+  stroke: #4ade80 !important;
+  stroke-width: 3px !important;
+  stroke-dasharray: 8 4 !important;
+  animation: ap-flow-dash 0.6s linear infinite;
+}
+@keyframes ap-flow-dash {
+  to { stroke-dashoffset: -12; }
+}
+
+.ap-token-dot {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  margin-top: -9px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #bbf7d0, #22c55e 55%, #166534);
+  box-shadow: 0 0 12px #4ade80, 0 0 24px rgba(74, 222, 128, 0.5);
+  pointer-events: none;
+  z-index: 1000;
+  transition: left 0.45s ease-in-out, top 0.45s ease-in-out;
+  opacity: 0;
+}
+.ap-token-dot.visible {
+  opacity: 1;
+}
+
+/* ---- Проекты / БД ---- */
+.project-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.projects-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.primary-sm {
+  background: var(--primary) !important;
+  color: white !important;
+}
+.projects-list {
+  padding: 12px 16px;
+  overflow-y: auto;
+  max-height: 45%;
+  border-bottom: 1px solid var(--border);
+}
+.project-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.project-card:hover {
+  border-color: var(--primary);
+  background: var(--surface2);
+}
+.project-card.active {
+  border-color: #4ade80;
+  box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.3);
+}
+.project-card .meta { flex: 1; min-width: 0; }
+.project-card .title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.project-card .sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.project-card .actions-mini {
+  display: flex;
+  gap: 6px;
+}
+.projects-docs {
+  padding: 12px 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+.projects-docs h3 {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.doc-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.doc-card .meta { flex: 1; }
+.doc-card .title { font-size: 0.9rem; }
+.doc-card .sub { font-size: 0.75rem; color: var(--muted); }

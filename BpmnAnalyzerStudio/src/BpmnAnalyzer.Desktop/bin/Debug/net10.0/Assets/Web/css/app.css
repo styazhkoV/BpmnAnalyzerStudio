@@ -1,0 +1,192 @@
+:root {
+  --bg: #0f1419;
+  --surface: #1a2332;
+  --surface2: #243044;
+  --border: #2d3a4f;
+  --text: #e7ecf3;
+  --muted: #8b9bb4;
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --radius: 8px;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  display: grid;
+  grid-template-rows: 56px 1fr;
+  grid-template-columns: 1fr 280px;
+  height: 100vh;
+}
+
+.header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+.logo-icon { color: var(--primary); font-size: 1.4rem; }
+.logo small {
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-left: 4px;
+}
+
+.tabs { display: flex; gap: 4px; }
+.tab {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.15s;
+}
+.tab:hover { background: var(--surface2); color: var(--text); }
+.tab.active { background: var(--primary); color: white; }
+
+.actions { margin-left: auto; display: flex; gap: 8px; }
+
+.btn, .btn-sm {
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: 0.15s;
+}
+.btn {
+  padding: 8px 16px;
+  background: var(--surface2);
+  color: var(--text);
+}
+.btn:hover { background: var(--border); }
+.btn.primary { background: var(--primary); color: white; }
+.btn.primary:hover { background: var(--primary-hover); }
+.btn.secondary { background: transparent; border: 1px solid var(--border); }
+.btn-sm {
+  padding: 5px 10px;
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 0.8rem;
+}
+.btn-sm:hover { background: var(--border); }
+
+.main {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.panel {
+  display: none;
+  height: 100%;
+  flex-direction: column;
+}
+.panel.active { display: flex; }
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.toolbar-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 4px;
+}
+.hint { color: var(--muted); font-size: 0.8rem; margin-left: 8px; }
+
+.canvas {
+  flex: 1;
+  background: #1e2a3a;
+}
+
+.djs-container { background: #1e2a3a !important; }
+.bjs-powered-by { display: none !important; }
+
+/* Палитра и элементы bpmn-js */
+.djs-palette {
+  background: #1a2332 !important;
+  border: 1px solid #2d3a4f !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
+.djs-palette .separator { border-color: #2d3a4f !important; }
+.djs-palette .entry {
+  color: #4ade80 !important;
+  fill: #4ade80 !important;
+  border-radius: 6px !important;
+  opacity: 1 !important;
+}
+.djs-palette .entry:hover {
+  background: rgba(74, 222, 128, 0.18) !important;
+}
+.djs-context-pad .group {
+  background: #1a2332 !important;
+  border: 1px solid #2d3a4f !important;
+  border-radius: 10px !important;
+}
+.properties {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 16px;
+  overflow-y: auto;
+}
+.properties h3 {
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.muted { color: var(--muted); font-size: 0.9rem; }
+.prop-group { margin-bottom: 16px; }
+.prop-group label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+.prop-group input,
+.prop-group textarea,
+.prop-group select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  padding: 6px 8px;
+  font-size: 0.85rem;
+}
+.prop-group textarea { min-height: 60px; resize: vertical; }

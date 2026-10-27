@@ -44,10 +44,9 @@ public partial class MainViewModel : ViewModelBase
 
     public void UpdateXmlFromEditor(string newXml)
     {
-        if (!string.Equals(_bpmnXmlContent, newXml))
+        if (!string.Equals(BpmnXmlContent, newXml))
         {
-            _bpmnXmlContent = newXml;
-            OnPropertyChanged(nameof(BpmnXmlContent));
+            BpmnXmlContent = newXml; // Безопасное обновление через сгенерированное свойство
             StatusMessage = "Схема обновлена из визуального редактора.";
         }
     }
@@ -70,8 +69,8 @@ public partial class MainViewModel : ViewModelBase
                 ValidationErrors.Add($"[{err.RuleCode}] {err.Message}");
             }
 
-            StatusMessage = errors.Any()
-                ? $"Найдено нарушений правил: {errors.Count}."
+            StatusMessage = errors.Any() 
+                ? $"Найдено нарушений правил: {errors.Count}." 
                 : "Валидация успешна! Все правила соблюдены.";
         }
         catch (Exception ex)
@@ -110,9 +109,9 @@ public partial class MainViewModel : ViewModelBase
         if (Application.Current != null)
         {
             var currentVariant = Application.Current.RequestedThemeVariant;
-            Application.Current.RequestedThemeVariant =
-                currentVariant == Avalonia.Styling.ThemeVariant.Dark
-                    ? Avalonia.Styling.ThemeVariant.Light
+            Application.Current.RequestedThemeVariant = 
+                currentVariant == Avalonia.Styling.ThemeVariant.Dark 
+                    ? Avalonia.Styling.ThemeVariant.Light 
                     : Avalonia.Styling.ThemeVariant.Dark;
 
             StatusMessage = "Тема интерфейса переключена.";

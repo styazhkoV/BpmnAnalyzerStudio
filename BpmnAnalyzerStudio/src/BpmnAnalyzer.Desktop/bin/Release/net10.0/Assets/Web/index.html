@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AnalystPad — BPMN → Техническое задание</title>
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.11.1/dist/assets/diagram-js.css" />
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.11.1/dist/assets/bpmn-js.css" />
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.11.1/dist/assets/bpmn-font/css/bpmn-embedded.css" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">◈</span>
+        <span>AnalystPad</span>
+        <small>BPMN → ТЗ для аналитиков</small>
+      </div>
+      <nav class="tabs">
+        <button class="tab active" data-tab="bpmn">BPMN Редактор</button>
+        <button class="tab" data-tab="notepad">Блокнот / ТЗ</button>
+        <button class="tab" data-tab="validation">Валидация</button>
+        <button class="tab" data-tab="projects">Проекты</button>
+      </nav>
+      <div class="actions">
+        <span id="current-project-label" class="project-label" title="Текущий проект">не сохранён</span>
+        <button id="btn-save-project" class="btn secondary">Сохранить проект</button>
+        <button id="btn-validate" class="btn secondary">Проверить схему</button>
+        <button id="btn-generate" class="btn primary">Сгенерировать ТЗ</button>
+        <button id="btn-export" class="btn">Экспорт</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- BPMN Editor -->
+      <section id="panel-bpmn" class="panel active">
+        <div class="toolbar">
+          <button id="btn-new" class="btn-sm">Новая схема</button>
+          <button id="btn-load" class="btn-sm">Загрузить XML</button>
+          <button id="btn-save" class="btn-sm">Сохранить XML</button>
+          <span class="toolbar-sep"></span>
+          <button id="btn-zoom-out" class="btn-sm" title="Уменьшить">−</button>
+          <button id="btn-zoom-fit" class="btn-sm" title="Вписать в экран">⊡</button>
+          <button id="btn-zoom-in" class="btn-sm" title="Увеличить">+</button>
+          <span class="toolbar-sep"></span>
+          <button id="btn-export-svg" class="btn-sm">SVG</button>
+          <button id="btn-export-png" class="btn-sm">PNG</button>
+          <span class="toolbar-sep"></span>
+          <button id="btn-animate" class="btn-sm btn-animate" title="Анимация токена по процессу">▶ Анимация</button>
+          <button id="btn-animate-stop" class="btn-sm" title="Остановить" style="display:none">■ Стоп</button>
+          <input type="file" id="file-input" accept=".bpmn,.xml" hidden />
+          <span class="hint">Пулы, задачи, шлюзы и связи. Незаполненные поля — при валидации.</span>
+        </div>
+        <div id="canvas" class="canvas"></div>
+      </section>
+
+      <!-- Notepad -->
+      <section id="panel-notepad" class="panel">
+        <div class="notepad-toolbar">
+          <select id="doc-type">
+            <option value="tz">Техническое задание</option>
+            <option value="requirements">Список требований</option>
+            <option value="notes">Свободные заметки</option>
+          </select>
+          <button id="btn-copy" class="btn-sm">Копировать</button>
+          <button id="btn-download-md" class="btn-sm">Скачать .md</button>
+        </div>
+        <textarea id="notepad" class="notepad" placeholder="Здесь появится сгенерированное техническое задание..."></textarea>
+      </section>
+
+      <!-- Validation -->
+      <section id="panel-validation" class="panel">
+        <div class="validation-header">
+          <h2>Результаты валидации BPMN</h2>
+          <span id="validation-summary" class="badge">—</span>
+        </div>
+        <div id="validation-list" class="validation-list">
+          <p class="empty">Нажмите «Проверить схему», чтобы увидеть ошибки и предупреждения.</p>
+        </div>
+      </section>
+
+      <!-- Projects (IndexedDB) -->
+      <section id="panel-projects" class="panel">
+        <div class="projects-toolbar">
+          <button id="btn-project-new" class="btn-sm">Новый проект</button>
+          <button id="btn-project-save" class="btn-sm primary-sm">Сохранить текущий</button>
+          <button id="btn-db-export" class="btn-sm">Бэкап JSON</button>
+          <button id="btn-db-import" class="btn-sm">Импорт JSON</button>
+          <input type="file" id="db-import-input" accept=".json,application/json" hidden />
+          <span class="hint">Данные хранятся локально в браузере (IndexedDB)</span>
+        </div>
+        <div id="projects-list" class="projects-list">
+          <p class="empty">Пока нет сохранённых проектов.</p>
+        </div>
+        <div class="projects-docs">
+          <h3>Документы выбранного проекта</h3>
+          <div id="documents-list" class="documents-list">
+            <p class="empty muted">Откройте проект, чтобы увидеть ТЗ и заметки.</p>
+          </div>
+          <button id="btn-save-doc" class="btn-sm" style="margin-top:8px">Сохранить текст блокнота в проект</button>
+        </div>
+      </section>
+    </main>
+
+    <aside id="properties" class="properties">
+      <h3>Свойства элемента</h3>
+      <div id="props-content">
+        <p class="muted">Выберите элемент на схеме</p>
+      </div>
+    </aside>
+  </div>
+
+  <script src="https://unpkg.com/bpmn-js@17.11.1/dist/bpmn-modeler.development.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/validator.js"></script>
+  <script src="js/requirements.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
