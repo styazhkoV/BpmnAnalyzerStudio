@@ -414,3 +414,251 @@ body {
   .hint { display: none; }
   .app-status { max-width: 100%; margin-left: 4px; }
 }
+
+/* Material-inspired surfaces and theme-aware controls. */
+:root {
+  color-scheme: dark;
+  --bg: #111318;
+  --surface: #1c1b1f;
+  --surface2: #2b2930;
+  --border: #49454f;
+  --text: #e6e1e5;
+  --muted: #cac4d0;
+  --primary: #d0bcff;
+  --primary-hover: #e8def8;
+  --success: #8bd5a5;
+  --warning: #f2c66d;
+  --danger: #f2b8b5;
+  --outline: #79747e;
+  --button-bg: #35343a;
+  --button-hover: #45434b;
+  --primary-text: #381e72;
+  --diagram-label: #e6e1e5;
+  --diagram-connection: #c9c5d0;
+  --radius: 12px;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f7f5fa;
+  --surface: #fffbfe;
+  --surface2: #f0edf4;
+  --border: #e7e0ec;
+  --text: #1d1b20;
+  --muted: #625d67;
+  --primary: #6750a4;
+  --primary-hover: #4f378b;
+  --success: #146c43;
+  --warning: #8a5700;
+  --danger: #b3261e;
+  --outline: #79747e;
+  --button-bg: #f0edf4;
+  --button-hover: #e8e2ed;
+  --primary-text: #ffffff;
+  --diagram-label: #25232a;
+  --diagram-connection: #55515b;
+}
+
+body,
+.header,
+.toolbar,
+.notepad-toolbar,
+.projects-toolbar,
+.properties,
+.validation-item,
+.project-card,
+.document-card {
+  color: var(--text);
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.header {
+  min-height: 56px;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 10%);
+}
+
+.tab {
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.tab.active {
+  background: var(--primary);
+  color: var(--primary-text);
+}
+
+.btn,
+.btn-sm {
+  border-color: var(--outline);
+  border-radius: 999px;
+  background: var(--button-bg);
+  color: var(--text);
+  font-weight: 600;
+  min-height: 36px;
+}
+
+.btn {
+  padding: 8px 16px;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+}
+
+.btn:hover,
+.btn-sm:hover {
+  background: var(--button-hover);
+  border-color: var(--primary);
+}
+
+.btn.primary,
+.btn-sm.primary-sm {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-text);
+}
+
+.btn.primary:hover,
+.btn-sm.primary-sm:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.btn:focus-visible,
+.btn-sm:focus-visible,
+.tab:focus-visible,
+.notepad:focus-visible,
+.notepad-toolbar select:focus-visible,
+.prop-group input:focus-visible,
+.prop-group textarea:focus-visible,
+.prop-group select:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.btn:disabled,
+.btn-sm:disabled {
+  background: var(--surface2);
+  border-color: var(--border);
+  color: var(--muted);
+}
+
+.panel,
+.main,
+#canvas,
+.notepad,
+.prop-group input,
+.prop-group textarea,
+.prop-group select,
+.notepad-toolbar select {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.toolbar,
+.notepad-toolbar,
+.projects-toolbar,
+.properties,
+.projects-docs {
+  background-color: var(--surface);
+  border-color: var(--border);
+}
+
+.properties {
+  border-left: 1px solid var(--border);
+}
+
+.prop-group input,
+.prop-group textarea,
+.prop-group select,
+.notepad-toolbar select {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.validation-item,
+.project-card,
+.document-card {
+  background: var(--surface);
+  border-color: var(--border);
+  border-radius: 12px;
+}
+
+.validation-item:hover,
+.project-card:hover,
+.document-card:hover {
+  border-color: var(--primary);
+}
+
+.badge {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+}
+
+.djs-label,
+.djs-visual text {
+  fill: var(--diagram-label) !important;
+}
+
+.djs-connection .djs-visual path {
+  stroke: var(--diagram-connection);
+}
+
+.djs-palette,
+.djs-context-pad .group,
+.djs-popup,
+.djs-popup-header,
+.djs-popup-body,
+.djs-popup-search {
+  color: var(--text) !important;
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+
+.djs-palette .entry,
+.djs-context-pad .entry,
+.djs-popup-entry,
+.djs-popup-entry .entry-title,
+.djs-popup-entry .entry-description,
+.djs-popup-entry .entry-icon {
+  color: var(--text) !important;
+  fill: var(--text) !important;
+}
+
+.djs-context-pad .entry,
+.djs-popup-search input {
+  background: var(--surface2) !important;
+  border-color: var(--outline) !important;
+}
+
+.djs-popup-search input {
+  color: var(--text) !important;
+}
+
+.djs-popup-search input::placeholder {
+  color: var(--muted) !important;
+}
+
+.djs-popup-entry:hover,
+.djs-popup-entry.active {
+  color: var(--primary-text) !important;
+  background: var(--primary) !important;
+}
+
+.theme-toggle {
+  white-space: nowrap;
+}
+
+.document-save-button {
+  margin-top: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

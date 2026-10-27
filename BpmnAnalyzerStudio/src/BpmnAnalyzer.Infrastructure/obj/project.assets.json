@@ -172,7 +172,7 @@
     ]
   },
   "packageFolders": {
-    "/Users/alexsnow/.nuget/packages/": {}
+    "/tmp/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
@@ -180,11 +180,11 @@
       "projectUniqueName": "/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Infrastructure/BpmnAnalyzer.Infrastructure.csproj",
       "projectName": "BpmnAnalyzer.Infrastructure",
       "projectPath": "/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Infrastructure/BpmnAnalyzer.Infrastructure.csproj",
-      "packagesPath": "/Users/alexsnow/.nuget/packages/",
+      "packagesPath": "/tmp/.nuget/packages/",
       "outputPath": "/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Infrastructure/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/alexsnow/.nuget/NuGet/NuGet.Config"
+        "/tmp/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"

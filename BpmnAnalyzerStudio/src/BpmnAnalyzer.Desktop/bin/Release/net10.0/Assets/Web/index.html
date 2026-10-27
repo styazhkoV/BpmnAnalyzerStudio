@@ -14,14 +14,15 @@
         <span>AnalystPad</span>
         <small>BPMN → ТЗ для аналитиков</small>
       </div>
-      <nav class="tabs">
-        <button class="tab active" data-tab="bpmn">BPMN Редактор</button>
-        <button class="tab" data-tab="notepad">Блокнот / ТЗ</button>
-        <button class="tab" data-tab="validation">Валидация</button>
-        <button class="tab" data-tab="projects">Проекты</button>
+      <nav class="tabs" role="tablist" aria-label="Разделы приложения">
+        <button class="tab active" id="tab-bpmn" role="tab" aria-selected="true" aria-controls="panel-bpmn" data-tab="bpmn">BPMN Редактор</button>
+        <button class="tab" id="tab-notepad" role="tab" aria-selected="false" aria-controls="panel-notepad" data-tab="notepad">Блокнот / ТЗ</button>
+        <button class="tab" id="tab-validation" role="tab" aria-selected="false" aria-controls="panel-validation" data-tab="validation">Валидация</button>
+        <button class="tab" id="tab-projects" role="tab" aria-selected="false" aria-controls="panel-projects" data-tab="projects">Проекты</button>
       </nav>
       <div class="actions">
         <span id="current-project-label" class="project-label" title="Текущий проект">не сохранён</span>
+        <button id="btn-theme" class="btn theme-toggle" type="button" aria-pressed="true" title="Переключить цветовую тему">☀ Светлая тема</button>
         <button id="btn-save-project" class="btn secondary">Сохранить проект</button>
         <button id="btn-validate" class="btn secondary">Проверить схему</button>
         <button id="btn-generate" class="btn primary">Сгенерировать ТЗ</button>
@@ -31,7 +32,7 @@
 
     <main class="main">
       <!-- BPMN Editor -->
-      <section id="panel-bpmn" class="panel active">
+      <section id="panel-bpmn" class="panel active" role="tabpanel" aria-labelledby="tab-bpmn">
         <div class="toolbar">
           <button id="btn-new" class="btn-sm">Новая схема</button>
           <button id="btn-load" class="btn-sm">Загрузить XML</button>
@@ -55,7 +56,7 @@
       </section>
 
       <!-- Notepad -->
-      <section id="panel-notepad" class="panel">
+      <section id="panel-notepad" class="panel" role="tabpanel" aria-labelledby="tab-notepad">
         <div class="notepad-toolbar">
           <select id="doc-type">
             <option value="tz">Техническое задание</option>
@@ -69,7 +70,7 @@
       </section>
 
       <!-- Validation -->
-      <section id="panel-validation" class="panel">
+      <section id="panel-validation" class="panel" role="tabpanel" aria-labelledby="tab-validation">
         <div class="validation-header">
           <h2>Результаты валидации BPMN</h2>
           <span id="validation-summary" class="badge">—</span>
@@ -80,7 +81,7 @@
       </section>
 
       <!-- Projects (IndexedDB) -->
-      <section id="panel-projects" class="panel">
+      <section id="panel-projects" class="panel" role="tabpanel" aria-labelledby="tab-projects">
         <div class="projects-toolbar">
           <button id="btn-project-new" class="btn-sm">Новый проект</button>
           <button id="btn-project-save" class="btn-sm primary-sm">Сохранить текущий</button>
@@ -98,7 +99,7 @@
           <div id="documents-list" class="documents-list">
             <p class="empty muted">Откройте проект, чтобы увидеть ТЗ и заметки.</p>
           </div>
-          <button id="btn-save-doc" class="btn-sm" style="margin-top:8px">Сохранить текст блокнота в проект</button>
+          <button id="btn-save-doc" class="btn-sm document-save-button">Сохранить текст блокнота в проект</button>
         </div>
       </section>
     </main>

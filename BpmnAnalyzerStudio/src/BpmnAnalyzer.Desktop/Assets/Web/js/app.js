@@ -15,6 +15,12 @@
   let animationTimer = null;
   let activeOverlay = null;
   let backendRequestSequence = 0;
+  let draftSaveTimer = null;
+  let draftVersion = 0;
+  let draftStorageWarningShown = false;
+  let restoringDraft = false;
+  const draftStorageKey = "analystpad.draft";
+  const themeStorageKey = "analystpad.theme";
   const pendingBackendRequests = new Map();
 
   window.onBackendResponse = (response) => {
@@ -65,6 +71,76 @@
     setStatus(`${action}: ${message}`, "error");
   }
 
+  function applyTheme(theme) {
+    const activeTheme = theme === "light" ? "light" : "dark";
+    document.documentElement.dataset.theme = activeTheme;
+    const button = $("#btn-theme");
+    const lightTheme = activeTheme === "light";
+    button.textContent = lightTheme ? "☀ Светлая тема" : "☾ Тёмная тема";
+    button.setAttribute("aria-pressed", String(lightTheme));
+    button.setAttribute("aria-label", lightTheme ? "Светлая тема включена" : "Тёмная тема включена");
+  }
+
+  function toggleTheme() {
+    const nextTheme = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+    applyTheme(nextTheme);
+    try {
+      window.localStorage.setItem(themeStorageKey, nextTheme);
+    } catch (error) {
+      reportError("Тема изменена, но не сохранена для следующего запуска", error);
+      return;
+    }
+    setStatus(nextTheme === "light" ? "Включена светлая тема." : "Включена тёмная тема.", "success");
+  }
+
+  function loadSavedTheme() {
+    try {
+      applyTheme(window.localStorage.getItem(themeStorageKey) || "dark");
+    } catch (error) {
+      applyTheme("dark");
+      console.warn("Не удалось загрузить сохранённую тему.", error);
+    }
+  }
+
+  function loadDraft() {
+    const storedDraft = window.localStorage.getItem(draftStorageKey);
+    if (!storedDraft) return null;
+
+    const draft = JSON.parse(storedDraft);
+    if (!draft || typeof draft.xml !== "string" || !draft.xml.trim()) {
+      throw new Error("Сохранённый черновик BPMN имеет некорректный формат.");
+    }
+    return draft;
+  }
+
+  function scheduleDraftSave() {
+    if (!modeler || restoringDraft) return;
+
+    window.clearTimeout(draftSaveTimer);
+    const version = ++draftVersion;
+    draftSaveTimer = window.setTimeout(async () => {
+      try {
+        const xml = await saveXml();
+        if (version !== draftVersion) return;
+
+        const draft = {
+          xml,
+          notepad: $("#notepad").value,
+          documentType: $("#doc-type").value,
+          updatedAt: new Date().toISOString()
+        };
+        window.localStorage.setItem(draftStorageKey, JSON.stringify(draft));
+        draftStorageWarningShown = false;
+        setStatus("Черновик автоматически сохранён на этом устройстве.", "success");
+      } catch (error) {
+        if (!draftStorageWarningShown) {
+          draftStorageWarningShown = true;
+          reportError("Не удалось автоматически сохранить черновик", error);
+        }
+      }
+    }, 700);
+  }
+
   function setEditorEnabled(enabled) {
     for (const selector of modelerControls) {
       const element = $(selector);
@@ -72,23 +148,45 @@
     }
   }
 
-  function loadScript(src) {
+  function loadScript(src, timeoutMs = 12000) {
     return new Promise((resolve, reject) => {
       const script = document.createElement("script");
       script.src = src;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error(`Не удалось загрузить ${src}`));
+      const timeout = window.setTimeout(() => {
+        script.remove();
+        reject(new Error(`Истекло время ожидания загрузки ${src}`));
+      }, timeoutMs);
+      script.onload = () => {
+        window.clearTimeout(timeout);
+        resolve(script);
+      };
+      script.onerror = () => {
+        window.clearTimeout(timeout);
+        script.remove();
+        reject(new Error(`Не удалось загрузить ${src}`));
+      };
       document.head.append(script);
     });
   }
 
-  function loadStylesheet(href) {
+  function loadStylesheet(href, timeoutMs = 12000) {
     return new Promise((resolve, reject) => {
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.href = href;
-      link.onload = () => resolve();
-      link.onerror = () => reject(new Error(`Не удалось загрузить стили BPMN-редактора: ${href}`));
+      const timeout = window.setTimeout(() => {
+        link.remove();
+        reject(new Error(`Истекло время ожидания загрузки стилей BPMN-редактора: ${href}`));
+      }, timeoutMs);
+      link.onload = () => {
+        window.clearTimeout(timeout);
+        resolve(link);
+      };
+      link.onerror = () => {
+        window.clearTimeout(timeout);
+        link.remove();
+        reject(new Error(`Не удалось загрузить стили BPMN-редактора: ${href}`));
+      };
       document.head.append(link);
     });
   }
@@ -102,16 +200,18 @@
     ];
     let lastError;
     for (const cdn of cdns) {
+      const loadedStylesheets = [];
       try {
-        await Promise.all([
-          loadStylesheet(`${cdn}assets/diagram-js.css`),
-          loadStylesheet(`${cdn}assets/bpmn-js.css`),
-          loadStylesheet(`${cdn}assets/bpmn-font/css/bpmn-embedded.css`),
-          loadScript(`${cdn}bpmn-modeler.production.min.js`)
-        ]);
+        loadedStylesheets.push(await loadStylesheet(`${cdn}assets/diagram-js.css`));
+        loadedStylesheets.push(await loadStylesheet(`${cdn}assets/bpmn-js.css`));
+        loadedStylesheets.push(await loadStylesheet(`${cdn}assets/bpmn-font/css/bpmn-embedded.css`));
+        const script = await loadScript(`${cdn}bpmn-modeler.production.min.js`);
         if (window.BpmnJS) return;
+        script.remove();
+        throw new Error(`Библиотека BPMN не обнаружена после загрузки с ${cdn}.`);
       } catch (error) {
         lastError = error;
+        loadedStylesheets.forEach((stylesheet) => stylesheet.remove());
       }
     }
 
@@ -402,6 +502,7 @@
     await modeler.createDiagram();
     currentProjectId = null;
     updateProjectLabel(null);
+    scheduleDraftSave();
     setStatus("Создана новая BPMN-схема.", "success");
     showTab("bpmn");
   }
@@ -413,6 +514,7 @@
     modeler.get("canvas").zoom("fit-viewport");
     currentProjectId = null;
     updateProjectLabel(null);
+    scheduleDraftSave();
     setStatus(sourceName ? `Схема загружена: ${sourceName}` : "Схема импортирована.", "success");
     showTab("bpmn");
   }
@@ -476,6 +578,7 @@
       title.textContent = documentItem.title;
       const open = makeButton("Открыть", "btn-sm", () => {
         $("#notepad").value = documentItem.content;
+        scheduleDraftSave();
         showTab("notepad");
         setStatus(`Открыт документ «${documentItem.title}».`, "success");
       });
@@ -510,6 +613,7 @@
           modeler.get("canvas").zoom("fit-viewport");
           currentProjectId = project.id;
           updateProjectLabel(project);
+          scheduleDraftSave();
           await renderDocuments(project);
           showTab("bpmn");
           setStatus(`Открыт проект «${project.name}».`, "success");
@@ -585,6 +689,8 @@
   }
 
   function connectHandlers() {
+    $("#btn-theme").addEventListener("click", toggleTheme);
+
     document.querySelectorAll(".tab").forEach((tab) => {
       tab.addEventListener("click", () => {
         showTab(tab.dataset.tab);
@@ -592,6 +698,17 @@
           renderProjects().catch((error) => reportError("Не удалось загрузить проекты", error));
         }
       });
+    });
+
+    $("#notepad").addEventListener("input", scheduleDraftSave);
+    $("#doc-type").addEventListener("change", scheduleDraftSave);
+
+    document.addEventListener("keydown", (event) => {
+      if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
+      if (event.key.toLowerCase() !== "s") return;
+
+      event.preventDefault();
+      $("#btn-save-project").click();
     });
 
     $("#btn-new").addEventListener("click", () => createNewDiagram().catch((error) => reportError("Не удалось создать схему", error)));
@@ -663,6 +780,13 @@
 
   async function initializeModeler() {
     setEditorEnabled(false);
+    let savedDraft = null;
+
+    try {
+      savedDraft = loadDraft();
+    } catch (error) {
+      reportError("Не удалось прочитать автосохранённый черновик", error);
+    }
 
     try {
       await ensureBpmnLibrary();
@@ -672,22 +796,52 @@
         if (event.error) reportError("Не удалось загрузить BPMN-схему", event.error);
         else modeler.get("canvas").zoom("fit-viewport");
       });
-      modeler.on("commandStack.changed", () => setStatus("Есть несохранённые изменения.", "info"));
+      modeler.on("commandStack.changed", () => {
+        setStatus("Есть несохранённые изменения.", "info");
+        scheduleDraftSave();
+      });
       if (window.ResizeObserver) {
         new ResizeObserver(() => modeler.get("canvas").resized()).observe(canvasElement);
       } else {
         window.addEventListener("resize", () => modeler.get("canvas").resized());
       }
-      setEditorEnabled(true);
       await modeler.createDiagram();
       renderProperties(null);
-      setStatus("Редактор готов. Добавляйте элементы схемы через палитру.", "success");
+
+      if (savedDraft) {
+        window.clearTimeout(draftSaveTimer);
+        draftSaveTimer = null;
+        draftVersion += 1;
+        restoringDraft = true;
+        try {
+          await modeler.importXML(savedDraft.xml);
+          $("#notepad").value = typeof savedDraft.notepad === "string" ? savedDraft.notepad : "";
+          if (["tz", "requirements", "notes"].includes(savedDraft.documentType)) {
+            $("#doc-type").value = savedDraft.documentType;
+          }
+          const projectLabel = $("#current-project-label");
+          projectLabel.textContent = "Черновик восстановлен";
+          projectLabel.title = savedDraft.updatedAt
+            ? `Автосохранение: ${new Date(savedDraft.updatedAt).toLocaleString("ru-RU")}`
+            : "Автоматически сохранённый черновик";
+          setStatus("Восстановлен черновик с предыдущего запуска.", "success");
+        } catch (error) {
+          reportError("Не удалось восстановить черновик BPMN", error);
+        } finally {
+          restoringDraft = false;
+        }
+      } else {
+        setStatus("Редактор готов. Добавляйте элементы схемы через палитру.", "success");
+      }
+
+      setEditorEnabled(true);
     } catch (error) {
       setEditorEnabled(false);
       reportError("Редактор схем недоступен", error);
     }
   }
 
+  loadSavedTheme();
   connectHandlers();
   initializeModeler();
 })();
