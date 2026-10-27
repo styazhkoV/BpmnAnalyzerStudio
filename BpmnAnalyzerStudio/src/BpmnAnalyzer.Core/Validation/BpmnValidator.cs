@@ -10,6 +10,8 @@ public class BpmnValidator
     public IEnumerable<ValidationError> Validate(ProcessModel model)
     {
         var errors = new List<ValidationError>();
+        var startOutgoingFlows = new HashSet<string>(
+            model.StartEvents.SelectMany(startEvent => startEvent.OutgoingFlows));
 
         // --- Правило 1: Старт и Финиш (ровно 1 StartEvent, >= 1 EndEvent) ---
         if (model.StartEvents.Count != 1)
@@ -33,11 +35,12 @@ public class BpmnValidator
         // --- Правило 2: Отсутствие висячих нод (задачи и шлюзы должны иметь входящие и исходящие потоки) ---
         foreach (var task in model.Tasks)
         {
-            if (!task.IncomingFlows.Any() && !model.StartEvents.Any(s => s.OutgoingFlows.Intersect(task.OutgoingFlows).Any()))
+            if (task.IncomingFlows.Count == 0 &&
+                !task.OutgoingFlows.Any(startOutgoingFlows.Contains))
             {
                 errors.Add(new ValidationError(task.Id, "RULE-2", $"Задача '{task.Name}' ({task.Id}) не имеет входящих потоков управления."));
             }
-            if (!task.OutgoingFlows.Any())
+            if (task.OutgoingFlows.Count == 0)
             {
                 errors.Add(new ValidationError(task.Id, "RULE-2", $"Задача '{task.Name}' ({task.Id}) не имеет исходящих потоков управления."));
             }
@@ -45,11 +48,11 @@ public class BpmnValidator
 
         foreach (var gateway in model.Gateways)
         {
-            if (!gateway.IncomingFlows.Any())
+            if (gateway.IncomingFlows.Count == 0)
             {
                 errors.Add(new ValidationError(gateway.Id, "RULE-2", $"Шлюз ({gateway.Id}) не имеет входящих потоков."));
             }
-            if (!gateway.OutgoingFlows.Any())
+            if (gateway.OutgoingFlows.Count == 0)
             {
                 errors.Add(new ValidationError(gateway.Id, "RULE-2", $"Шлюз ({gateway.Id}) не имеет исходящих потоков."));
             }
@@ -78,17 +81,60 @@ public class BpmnValidator
         }
 
         // --- Правило 6: Условия на исходящих потоках развилочных шлюзов ---
-        var exclusiveGateways = model.Gateways.Where(g => g.GatewayType == "exclusiveGateway");
-        foreach (var gw in exclusiveGateways)
-        {
-            var outgoingFlowIds = gw.OutgoingFlows;
-            var flows = model.Flows.Where(f => outgoingFlowIds.Contains(f.Id)).ToList();
+        Dictionary<string, List<(int Index, SequenceFlow Flow)>>? flowsById = null;
 
-            foreach (var flow in flows)
+        foreach (var gateway in model.Gateways.Where(g => g.GatewayType == "exclusiveGateway"))
+        {
+            if (flowsById == null)
             {
-                if (!flow.HasCondition && !flow.IsDefault && flows.Count > 1)
+                flowsById = new Dictionary<string, List<(int Index, SequenceFlow Flow)>>();
+                for (var index = 0; index < model.Flows.Count; index++)
                 {
-                    errors.Add(new ValidationError(gw.Id, "RULE-6", $"Исходящий поток '{flow.Id}' из шлюза '{gw.Name}' не содержит обязательное условие (conditionExpression)."));
+                    var flow = model.Flows[index];
+                    if (!flowsById.TryGetValue(flow.Id, out var matchingFlows))
+                    {
+                        matchingFlows = new List<(int Index, SequenceFlow Flow)>();
+                        flowsById.Add(flow.Id, matchingFlows);
+                    }
+
+                    matchingFlows.Add((index, flow));
+                }
+            }
+
+            var visitedFlowIds = new HashSet<string>();
+            var matchingFlowCount = 0;
+            foreach (var flowId in gateway.OutgoingFlows)
+            {
+                if (visitedFlowIds.Add(flowId) && flowsById.TryGetValue(flowId, out var matchingFlows))
+                {
+                    matchingFlowCount += matchingFlows.Count;
+                }
+            }
+
+            if (matchingFlowCount <= 1)
+            {
+                continue;
+            }
+
+            visitedFlowIds.Clear();
+            var orderedMatchingFlows = new List<(int Index, SequenceFlow Flow)>(matchingFlowCount);
+            foreach (var flowId in gateway.OutgoingFlows)
+            {
+                if (!visitedFlowIds.Add(flowId) ||
+                    !flowsById.TryGetValue(flowId, out var matchingFlows))
+                {
+                    continue;
+                }
+
+                orderedMatchingFlows.AddRange(matchingFlows);
+            }
+
+            orderedMatchingFlows.Sort(static (left, right) => left.Index.CompareTo(right.Index));
+            foreach (var (_, flow) in orderedMatchingFlows)
+            {
+                if (!flow.HasCondition && !flow.IsDefault)
+                {
+                    errors.Add(new ValidationError(gateway.Id, "RULE-6", $"Исходящий поток '{flow.Id}' из шлюза '{gateway.Name}' не содержит обязательное условие (conditionExpression)."));
                 }
             }
         }
