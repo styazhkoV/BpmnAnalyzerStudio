@@ -48,9 +48,10 @@
           <button id="btn-export-png" class="btn-sm">PNG</button>
           <span class="toolbar-sep"></span>
           <button id="btn-animate" class="btn-sm btn-animate" title="Анимация токена по процессу">▶ Анимация</button>
-          <button id="btn-animate-stop" class="btn-sm" title="Остановить" style="display:none">■ Стоп</button>
+          <button id="btn-animate-stop" class="btn-sm" title="Остановить" hidden>■ Стоп</button>
           <input type="file" id="file-input" accept=".bpmn,.xml" hidden />
           <span class="hint">Пулы, задачи, шлюзы и связи. Незаполненные поля — при валидации.</span>
+          <span id="app-status" class="app-status" role="status" aria-live="polite">Загрузка BPMN-редактора…</span>
         </div>
         <div id="canvas" class="canvas"></div>
       </section>
@@ -89,6 +90,7 @@
           <button id="btn-db-import" class="btn-sm">Импорт JSON</button>
           <input type="file" id="db-import-input" accept=".json,application/json" hidden />
           <span class="hint">Данные хранятся локально в браузере (IndexedDB)</span>
+          <span id="projects-status" class="app-status" role="status" aria-live="polite"></span>
         </div>
         <div id="projects-list" class="projects-list">
           <p class="empty">Пока нет сохранённых проектов.</p>
