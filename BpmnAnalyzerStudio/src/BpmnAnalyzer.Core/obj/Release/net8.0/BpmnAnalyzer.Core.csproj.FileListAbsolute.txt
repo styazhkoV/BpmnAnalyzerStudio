@@ -10,3 +10,4 @@
 /Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/refint/BpmnAnalyzer.Core.dll
 /Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/BpmnAnalyzer.Core.pdb
 /Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/ref/BpmnAnalyzer.Core.dll
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/BpmnAnalyzer.Core.sourcelink.json
