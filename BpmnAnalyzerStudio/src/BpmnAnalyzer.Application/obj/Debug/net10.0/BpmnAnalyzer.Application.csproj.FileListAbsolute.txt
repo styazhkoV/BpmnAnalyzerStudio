@@ -1,0 +1,16 @@
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/bin/Debug/net10.0/BpmnAnalyzer.Application.deps.json
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/bin/Debug/net10.0/BpmnAnalyzer.Application.dll
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/bin/Debug/net10.0/BpmnAnalyzer.Application.pdb
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/bin/Debug/net10.0/BpmnAnalyzer.Core.dll
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/bin/Debug/net10.0/BpmnAnalyzer.Core.pdb
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/obj/Debug/net10.0/BpmnAnalyzer.Application.csproj.AssemblyReference.cache
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/obj/Debug/net10.0/BpmnAnalyzer.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/obj/Debug/net10.0/BpmnAnalyzer.Application.AssemblyInfoInputs.cache
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/obj/Debug/net10.0/BpmnAnalyzer.Application.AssemblyInfo.cs
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/obj/Debug/net10.0/BpmnAnalyzer.Application.csproj.CoreCompileInputs.cache
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/obj/Debug/net10.0/BpmnAnalyzer.Application.sourcelink.json
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/obj/Debug/net10.0/BpmnAnal.65911413.Up2Date
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/obj/Debug/net10.0/BpmnAnalyzer.Application.dll
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/obj/Debug/net10.0/refint/BpmnAnalyzer.Application.dll
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/obj/Debug/net10.0/BpmnAnalyzer.Application.pdb
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Application/obj/Debug/net10.0/ref/BpmnAnalyzer.Application.dll

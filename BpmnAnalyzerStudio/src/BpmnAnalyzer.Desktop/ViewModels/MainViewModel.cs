@@ -2,17 +2,24 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using Avalonia;
-using BpmnAnalyzer.Core.Parser;
-using BpmnAnalyzer.Core.Validation;
-using BpmnAnalyzer.Core.Export;
+using BpmnAnalyzer.Application.Services;
 
 namespace BpmnAnalyzer.Desktop.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
+    private readonly BpmnApplicationService _bpmnApplicationService;
+
+    public MainViewModel(
+        BpmnApplicationService bpmnApplicationService,
+        NotebookApplicationService notebookApplicationService)
+    {
+        _bpmnApplicationService = bpmnApplicationService;
+        Notebook = new NotebookViewModel(notebookApplicationService);
+    }
+
     [ObservableProperty]
     private string _statusMessage = "Готово к работе. Загрузите или отредактируйте BPMN схему.";
 
@@ -28,7 +35,7 @@ public partial class MainViewModel : ViewModelBase
 
     public ObservableCollection<string> ValidationErrors { get; } = new();
 
-    public NotebookViewModel Notebook { get; } = new();
+    public NotebookViewModel Notebook { get; }
 
     public event Action<string>? RequestLoadIntoEditor;
 
@@ -59,23 +66,20 @@ public partial class MainViewModel : ViewModelBase
 
         try
         {
-            var parser = new BpmnXmlParser();
-            var model = parser.Parse(BpmnXmlContent);
-            var validator = new BpmnValidator();
-            var errors = validator.Validate(model).ToList();
+            var result = _bpmnApplicationService.Validate(BpmnXmlContent);
 
-            foreach (var err in errors)
+            foreach (var error in result.Errors)
             {
-                ValidationErrors.Add($"[{err.RuleCode}] {err.Message}");
+                ValidationErrors.Add($"[{error.Code}] {error.Message}");
             }
 
-            StatusMessage = errors.Any() 
-                ? $"Найдено нарушений правил: {errors.Count}." 
+            StatusMessage = result.Errors.Any()
+                ? $"Найдено нарушений правил: {result.Errors.Count}."
                 : "Валидация успешна! Все правила соблюдены.";
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Ошибка разбора XML: {ex.Message}";
+            StatusMessage = $"Ошибка валидации BPMN: {ex.Message}";
         }
     }
 
@@ -86,14 +90,7 @@ public partial class MainViewModel : ViewModelBase
 
         try
         {
-            var parser = new BpmnXmlParser();
-            var model = parser.Parse(BpmnXmlContent);
-
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string outputPath = Path.Combine(desktopPath, "Agile_BRD_Requirements.docx");
-
-            var generator = new BrdDocxGenerator();
-            generator.Generate(outputPath, model);
+            var outputPath = _bpmnApplicationService.GenerateBrd(BpmnXmlContent);
 
             StatusMessage = $"Документ Agile BRD сохранен: {outputPath}";
         }
@@ -106,10 +103,10 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     private void ToggleTheme()
     {
-        if (Application.Current != null)
+        if (Avalonia.Application.Current != null)
         {
-            var currentVariant = Application.Current.RequestedThemeVariant;
-            Application.Current.RequestedThemeVariant = 
+            var currentVariant = Avalonia.Application.Current.RequestedThemeVariant;
+            Avalonia.Application.Current.RequestedThemeVariant =
                 currentVariant == Avalonia.Styling.ThemeVariant.Dark 
                     ? Avalonia.Styling.ThemeVariant.Light 
                     : Avalonia.Styling.ThemeVariant.Dark;

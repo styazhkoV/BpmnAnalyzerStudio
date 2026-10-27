@@ -28,6 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BpmnAnalyzer.Application\BpmnAnalyzer.Application.csproj" />
     <ProjectReference Include="..\BpmnAnalyzer.Core\BpmnAnalyzer.Core.csproj" />
+    <ProjectReference Include="..\BpmnAnalyzer.Infrastructure\BpmnAnalyzer.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

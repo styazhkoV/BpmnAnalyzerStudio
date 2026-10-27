@@ -1,18 +1,19 @@
 // src/BpmnAnalyzer.Desktop/Views/MainWindow.axaml.cs
 using Avalonia.Controls;
-using BpmnAnalyzer.Core.Export;
-using BpmnAnalyzer.Core.Parser;
-using BpmnAnalyzer.Core.Validation;
+using BpmnAnalyzer.Application.Services;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using BpmnAnalyzer.Desktop.ViewModels;
 
 namespace BpmnAnalyzer.Desktop.Views;
 
 public partial class MainWindow : Window
 {
+    private BpmnApplicationService? _bpmnApplicationService;
+
     private static readonly JsonSerializerOptions MessageJsonOptions = new()
     {
         PropertyNameCaseInsensitive = true
@@ -21,6 +22,17 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+    }
+
+    public void Configure(BpmnApplicationService bpmnApplicationService, MainViewModel viewModel)
+    {
+        if (_bpmnApplicationService is not null)
+        {
+            throw new InvalidOperationException("Сервисы главного окна уже настроены.");
+        }
+
+        _bpmnApplicationService = bpmnApplicationService;
+        DataContext = viewModel;
         BpmnWebView.WebMessageReceived += OnWebMessageReceived;
         InitializeWebView();
     }
@@ -74,28 +86,10 @@ public partial class MainWindow : Window
                 throw new InvalidOperationException("Запрос должен содержать идентификатор и BPMN XML.");
             }
 
-            var model = new BpmnXmlParser().Parse(request.Xml);
             object result = request.Action switch
             {
-                "validate" => new
-                {
-                    errors = new BpmnValidator().Validate(model)
-                        .Select(error => new
-                        {
-                            elementId = error.ElementId,
-                            code = error.RuleCode,
-                            message = error.Message
-                        }).ToArray(),
-                    counts = new
-                    {
-                        starts = model.StartEvents.Count,
-                        ends = model.EndEvents.Count,
-                        tasks = model.Tasks.Count,
-                        gateways = model.Gateways.Count,
-                        flows = model.Flows.Count
-                    }
-                },
-                "generate-brd" => GenerateBrd(model),
+                "validate" => Validate(request.Xml),
+                "generate-brd" => GenerateBrd(request.Xml),
                 _ => throw new InvalidOperationException($"Неизвестная операция бэкенда: {request.Action}.")
             };
 
@@ -114,22 +108,35 @@ public partial class MainWindow : Window
         }
     }
 
-    private static object GenerateBrd(BpmnAnalyzer.Core.Domain.ProcessModel model)
+    private object Validate(string xml)
     {
-        var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        if (string.IsNullOrWhiteSpace(desktopPath))
+        var result = (_bpmnApplicationService
+            ?? throw new InvalidOperationException("Сервисы главного окна не настроены."))
+            .Validate(xml);
+        return new
         {
-            throw new InvalidOperationException("Не удалось определить папку рабочего стола для сохранения BRD.");
-        }
+            errors = result.Errors.Select(error => new
+            {
+                elementId = error.ElementId,
+                code = error.Code,
+                message = error.Message
+            }).ToArray(),
+            counts = new
+            {
+                starts = result.Counts.Starts,
+                ends = result.Counts.Ends,
+                tasks = result.Counts.Tasks,
+                gateways = result.Counts.Gateways,
+                flows = result.Counts.Flows
+            }
+        };
+    }
 
-        const string fileName = "Agile_BRD_Requirements";
-        var outputPath = Path.Combine(desktopPath, $"{fileName}.docx");
-        for (var suffix = 1; File.Exists(outputPath); suffix++)
-        {
-            outputPath = Path.Combine(desktopPath, $"{fileName}_{suffix}.docx");
-        }
-
-        new BrdDocxGenerator().Generate(outputPath, model);
+    private object GenerateBrd(string xml)
+    {
+        var outputPath = (_bpmnApplicationService
+            ?? throw new InvalidOperationException("Сервисы главного окна не настроены."))
+            .GenerateBrd(xml);
         return new { path = outputPath };
     }
 

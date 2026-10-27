@@ -3,18 +3,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Text.Json;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
 using BpmnAnalyzer.Core.Domain;
+using BpmnAnalyzer.Application.Services;
 
 namespace BpmnAnalyzer.Desktop.ViewModels;
 
 public partial class NotebookViewModel : ViewModelBase
 {
+    private readonly NotebookApplicationService _notebookApplicationService;
+
     public ObservableCollection<NoteModel> Notes { get; } = new();
 
     [ObservableProperty]
@@ -23,9 +21,10 @@ public partial class NotebookViewModel : ViewModelBase
     [ObservableProperty]
     private string _statusMessage = "Блокнот готов к работе.";
 
-    public NotebookViewModel()
+    public NotebookViewModel(NotebookApplicationService notebookApplicationService)
     {
-        LoadNotes();
+        _notebookApplicationService = notebookApplicationService;
+        var loadError = LoadNotes();
         if (Notes.Count == 0)
         {
             AddNote();
@@ -33,6 +32,11 @@ public partial class NotebookViewModel : ViewModelBase
         else
         {
             SelectedNote = Notes.First();
+        }
+
+        if (loadError is not null)
+        {
+            StatusMessage = $"Ошибка загрузки заметок: {loadError}";
         }
     }
 
@@ -66,11 +70,7 @@ public partial class NotebookViewModel : ViewModelBase
     {
         try
         {
-            var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var filePath = Path.Combine(desktopPath, "analyst_notes.json");
-            
-            var json = JsonSerializer.Serialize(Notes, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(filePath, json);
+            var filePath = _notebookApplicationService.SaveNotes(Notes);
 
             StatusMessage = $"Заметки успешно сохранены: {filePath}";
         }
@@ -91,12 +91,7 @@ public partial class NotebookViewModel : ViewModelBase
 
         try
         {
-            var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var safeTitle = string.Join("_", SelectedNote.Title.Split(Path.GetInvalidFileNameChars()));
-            var filePath = Path.Combine(desktopPath, $"{safeTitle}.md");
-
-            var mdContent = $"# {SelectedNote.Title}\n\n*Обновлено: {SelectedNote.UpdatedAt:dd.MM.yyyy HH:mm}*\n\n---\n\n{SelectedNote.Content}";
-            File.WriteAllText(filePath, mdContent);
+            var filePath = _notebookApplicationService.ExportToMarkdown(SelectedNote);
 
             StatusMessage = $"Заметка экспортирована в Markdown: {filePath}";
         }
@@ -118,36 +113,7 @@ public partial class NotebookViewModel : ViewModelBase
 
         try
         {
-            var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var safeTitle = string.Join("_", selectedNote.Title.Split(Path.GetInvalidFileNameChars()));
-            var filePath = Path.Combine(desktopPath, $"{safeTitle}.docx");
-
-            using (var wordDocument = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
-            {
-                var mainPart = wordDocument.AddMainDocumentPart();
-                mainPart.Document = new Document(new Body());
-                var body = mainPart.Document.Body
-                    ?? throw new InvalidOperationException("Не удалось создать содержимое документа Word.");
-
-                body.AppendChild(new Paragraph(new Run(new Text(selectedNote.Title))
-                {
-                    RunProperties = new RunProperties(new Bold(), new FontSize() { Val = "28" })
-                }));
-
-                body.AppendChild(new Paragraph(new Run(new Text($"Дата обновления: {selectedNote.UpdatedAt:dd.MM.yyyy HH:mm}"))
-                {
-                    RunProperties = new RunProperties(new Italic(), new Color() { Val = "666666" })
-                }));
-
-                body.AppendChild(new Paragraph());
-
-                foreach (var line in selectedNote.Content.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
-                {
-                    body.AppendChild(new Paragraph(new Run(new Text(line))));
-                }
-
-                mainPart.Document.Save();
-            }
+            var filePath = _notebookApplicationService.ExportToWord(selectedNote);
 
             StatusMessage = $"Заметка экспортирована в Word (.docx): {filePath}";
         }
@@ -157,30 +123,19 @@ public partial class NotebookViewModel : ViewModelBase
         }
     }
 
-    private void LoadNotes()
+    private string? LoadNotes()
     {
         try
         {
-            var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var filePath = Path.Combine(desktopPath, "analyst_notes.json");
-
-            if (File.Exists(filePath))
+            foreach (var note in _notebookApplicationService.LoadNotes())
             {
-                var json = File.ReadAllText(filePath);
-                var loadedNotes = JsonSerializer.Deserialize<ObservableCollection<NoteModel>>(json);
-                if (loadedNotes != null)
-                {
-                    Notes.Clear();
-                    foreach (var note in loadedNotes)
-                    {
-                        Notes.Add(note);
-                    }
-                }
+                Notes.Add(note);
             }
+            return null;
         }
-        catch
+        catch (Exception ex)
         {
-            // Игнорируем при первом запуске
+            return ex.Message;
         }
     }
 }

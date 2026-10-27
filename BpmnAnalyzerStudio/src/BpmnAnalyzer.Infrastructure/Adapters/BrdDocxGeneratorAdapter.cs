@@ -1,16 +1,14 @@
-// src/BpmnAnalyzer.Core/Export/BrdDocxGenerator.cs
-using System.IO;
-using System.Linq;
+using BpmnAnalyzer.Application.Adapters;
+using BpmnAnalyzer.Core.Domain;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using BpmnAnalyzer.Core.Domain;
 
-namespace BpmnAnalyzer.Core.Export;
+namespace BpmnAnalyzer.Infrastructure.Adapters;
 
-public class BrdDocxGenerator
+public sealed class BrdDocxGeneratorAdapter : IBrdDocxGeneratorAdapter
 {
-    public void Generate(string filePath, ProcessModel model, string documentTitle = "Agile Business Requirements Document (BRD)")
+    public void Generate(string filePath, ProcessModel model)
     {
         using var wordDocument = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document);
         
@@ -20,7 +18,7 @@ public class BrdDocxGenerator
             ?? throw new InvalidOperationException("Не удалось создать содержимое документа BRD.");
 
         // 1. Заголовок документа
-        AddHeading(body, documentTitle, 28, true);
+        AddHeading(body, "Agile Business Requirements Document (BRD)", 28, true);
         AddParagraph(body, "Автоматически сгенерировано с помощью BpmnAnalyzer Studio (.NET 8).");
         AddEmptyParagraph(body);
 
