@@ -1,0 +1,180 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/alexsnow/Desktop/BpmnAnalyzerStudio/tests/BpmnAnalyzer.Tests/BpmnAnalyzer.Tests.csproj": {}
+  },
+  "projects": {
+    "/Users/alexsnow/Desktop/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/BpmnAnalyzer.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/alexsnow/Desktop/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/BpmnAnalyzer.Core.csproj",
+        "projectName": "BpmnAnalyzer.Core",
+        "projectPath": "/Users/alexsnow/Desktop/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/BpmnAnalyzer.Core.csproj",
+        "packagesPath": "/Users/alexsnow/.nuget/packages/",
+        "outputPath": "/Users/alexsnow/Desktop/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/alexsnow/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "framework": "net8.0",
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.400"
+      },
+      "frameworks": {
+        "net8.0": {
+          "framework": "net8.0",
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "DocumentFormat.OpenXml": {
+              "target": "Package",
+              "version": "[3.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.31, 8.0.31]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.31, 8.0.31]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.401/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/alexsnow/Desktop/BpmnAnalyzerStudio/tests/BpmnAnalyzer.Tests/BpmnAnalyzer.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/alexsnow/Desktop/BpmnAnalyzerStudio/tests/BpmnAnalyzer.Tests/BpmnAnalyzer.Tests.csproj",
+        "projectName": "BpmnAnalyzer.Tests",
+        "projectPath": "/Users/alexsnow/Desktop/BpmnAnalyzerStudio/tests/BpmnAnalyzer.Tests/BpmnAnalyzer.Tests.csproj",
+        "packagesPath": "/Users/alexsnow/.nuget/packages/",
+        "outputPath": "/Users/alexsnow/Desktop/BpmnAnalyzerStudio/tests/BpmnAnalyzer.Tests/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/alexsnow/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "framework": "net8.0",
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/Users/alexsnow/Desktop/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/BpmnAnalyzer.Core.csproj": {
+                "projectPath": "/Users/alexsnow/Desktop/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/BpmnAnalyzer.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.400"
+      },
+      "frameworks": {
+        "net8.0": {
+          "framework": "net8.0",
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.8.0, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.5.3, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.5.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.31, 8.0.31]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.31, 8.0.31]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.401/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

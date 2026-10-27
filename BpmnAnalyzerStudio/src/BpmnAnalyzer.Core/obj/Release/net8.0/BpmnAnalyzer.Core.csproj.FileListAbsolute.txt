@@ -1,0 +1,12 @@
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/bin/Release/net8.0/BpmnAnalyzer.Core.deps.json
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/bin/Release/net8.0/BpmnAnalyzer.Core.dll
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/bin/Release/net8.0/BpmnAnalyzer.Core.pdb
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/BpmnAnalyzer.Core.csproj.AssemblyReference.cache
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/BpmnAnalyzer.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/BpmnAnalyzer.Core.AssemblyInfoInputs.cache
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/BpmnAnalyzer.Core.AssemblyInfo.cs
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/BpmnAnalyzer.Core.csproj.CoreCompileInputs.cache
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/BpmnAnalyzer.Core.dll
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/refint/BpmnAnalyzer.Core.dll
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/BpmnAnalyzer.Core.pdb
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Core/obj/Release/net8.0/ref/BpmnAnalyzer.Core.dll

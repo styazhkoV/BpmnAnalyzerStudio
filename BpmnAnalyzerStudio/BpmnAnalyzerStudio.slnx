@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BpmnAnalyzer.Core/BpmnAnalyzer.Core.csproj" />
+    <Project Path="src/BpmnAnalyzer.Desktop/BpmnAnalyzer.Desktop.csproj" />
+  </Folder>
+</Solution>

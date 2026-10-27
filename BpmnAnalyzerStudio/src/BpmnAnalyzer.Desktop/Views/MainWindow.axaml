@@ -1,0 +1,104 @@
+<!-- src/BpmnAnalyzer.Desktop/Views/MainWindow.axaml -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:BpmnAnalyzer.Desktop.ViewModels"
+        xmlns:webview="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.WebView"
+        x:Class="BpmnAnalyzer.Desktop.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="BpmnAnalyzer Studio — Analyst Workspace" Width="1300" Height="850"
+        Background="{DynamicResource BgAppColor}">
+
+    <TabControl Margin="8">
+        <!-- Вкладка 1: BPMN Студия и генератор BRD -->
+        <TabItem Header="⚙️ BPMN &amp; Agile BRD Studio">
+            <Grid ColumnDefinitions="340, *">
+                <Border Grid.Column="0" Background="{DynamicResource BgCardColor}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,0,1,0" Padding="16">
+                    <StackPanel Spacing="10">
+                        <DockPanel>
+                            <TextBlock Text="BpmnAnalyzer" FontWeight="Bold" FontSize="18" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                            <Button Content="🌓 Тема" 
+                                    Command="{Binding ToggleThemeCommand}" 
+                                    DockPanel.Dock="Right" 
+                                    FontSize="11" Padding="6,2"/>
+                        </DockPanel>
+                        <TextBlock Text="Валидация правил и генерация BRD" FontSize="12" Foreground="{DynamicResource TextSecondary}" Margin="0,-6,0,2"/>
+
+                        <Button Content="🔍 Проверить правила (1-7)" 
+                                Command="{Binding ValidateProcessCommand}" 
+                                HorizontalAlignment="Stretch" 
+                                Background="{DynamicResource PrimaryColor}" Foreground="White" FontWeight="SemiBold"/>
+
+                        <Button Content="📄 Экспорт в Agile BRD (.docx)" 
+                                Command="{Binding GenerateBrdCommand}" 
+                                HorizontalAlignment="Stretch" 
+                                Background="{DynamicResource SuccessColor}" Foreground="White" FontWeight="SemiBold"/>
+                        
+                        <Separator Margin="0,2"/>
+
+                        <DockPanel>
+                            <TextBlock Text="BPMN 2.0 XML:" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                            <Button Content="🔄 В редактор" 
+                                    Command="{Binding PushToEditorCommand}" 
+                                    DockPanel.Dock="Right" 
+                                    FontSize="11" Padding="6,2"/>
+                        </DockPanel>
+
+                        <TextBox Text="{Binding BpmnXmlContent}" 
+                                 AcceptsReturn="True" 
+                                 Height="180" 
+                                 FontFamily="Consolas, monospace" 
+                                 FontSize="11"
+                                 Watermark="XML схемы..."/>
+                        
+                        <TextBlock Text="Статус:" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                        <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" Foreground="{DynamicResource TextSecondary}" FontSize="12"/>
+
+                        <TextBlock Text="Ошибки валидации:" FontWeight="SemiBold" Foreground="{DynamicResource DangerColor}"/>
+                        <ListBox ItemsSource="{Binding ValidationErrors}" Height="100"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Правая панель: NativeWebView с bpmn-js -->
+                <Border Grid.Column="1" Margin="12" CornerRadius="8" ClipToBounds="True" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1">
+                    <webview:NativeWebView x:Name="BpmnWebView" />
+                </Border>
+            </Grid>
+        </TabItem>
+
+        <!-- Вкладка 2: Аналитический блокнот -->
+        <TabItem Header="📝 Аналитический блокнот">
+            <Grid ColumnDefinitions="300, *" Margin="4">
+                <!-- Список заметок -->
+                <Border Grid.Column="0" Background="{DynamicResource BgCardColor}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="6" Margin="0,0,8,0" Padding="8">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top" Spacing="6" Margin="0,0,0,8">
+                            <Button Content="➕ Новая заметка" Command="{Binding Notebook.AddNoteCommand}" HorizontalAlignment="Stretch" Background="{DynamicResource PrimaryColor}" Foreground="White"/>
+                            <Button Content="💾 Сохранить всё" Command="{Binding Notebook.SaveNotesCommand}" HorizontalAlignment="Stretch" Background="{DynamicResource SuccessColor}" Foreground="White"/>
+                        </StackPanel>
+                        <ListBox ItemsSource="{Binding Notebook.Notes}" SelectedItem="{Binding Notebook.SelectedNote}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Title}" FontWeight="Medium" TextTrimming="CharacterEllipsis"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Border>
+
+                <!-- Редактор выбранной заметки -->
+                <Border Grid.Column="1" Background="{DynamicResource BgCardColor}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="6" Padding="16" DataContext="{Binding Notebook.SelectedNote}">
+                    <StackPanel Spacing="10">
+                        <TextBox Text="{Binding Title}" FontSize="16" FontWeight="Bold" Watermark="Название заметки..."/>
+                        <TextBox Text="{Binding Content}" AcceptsReturn="True" Height="420" FontFamily="Consolas, monospace" FontSize="13" Watermark="Текст требований, заметок или интервью..."/>
+                        
+                        <UniformGrid Columns="3" Margin="0,4,0,0">
+                            <Button Content="📥 Экспорт в .md" Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Notebook.ExportToMarkdownCommand}" Background="#7C3AED" Foreground="White" HorizontalAlignment="Stretch" Margin="0,0,4,0"/>
+                            <Button Content="📄 Экспорт в .docx" Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Notebook.ExportToWordCommand}" Background="{DynamicResource SuccessColor}" Foreground="White" HorizontalAlignment="Stretch" Margin="2,0,2,0"/>
+                            <Button Content="🗑️ Удалить" Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Notebook.DeleteNoteCommand}" Background="{DynamicResource DangerColor}" Foreground="White" HorizontalAlignment="Stretch" Margin="4,0,0,0"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>

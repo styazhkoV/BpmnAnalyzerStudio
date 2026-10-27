@@ -1,0 +1,7 @@
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/obj/Release/net8.0/BpmnAnalyzer.Desktop.csproj.AssemblyReference.cache
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/obj/Release/net8.0/Avalonia/Resources.Inputs.cache
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/obj/Release/net8.0/Avalonia/resources
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/obj/Release/net8.0/BpmnAnalyzer.Desktop.GeneratedMSBuildEditorConfig.editorconfig
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/obj/Release/net8.0/BpmnAnalyzer.Desktop.AssemblyInfoInputs.cache
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/obj/Release/net8.0/BpmnAnalyzer.Desktop.AssemblyInfo.cs
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/obj/Release/net8.0/BpmnAnalyzer.Desktop.csproj.CoreCompileInputs.cache
