@@ -4,9 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AnalystPad — BPMN → Техническое задание</title>
-  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.11.1/dist/assets/diagram-js.css" />
-  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.11.1/dist/assets/bpmn-js.css" />
-  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.11.1/dist/assets/bpmn-font/css/bpmn-embedded.css" />
   <link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
@@ -46,6 +43,7 @@
           <span class="toolbar-sep"></span>
           <button id="btn-export-svg" class="btn-sm">SVG</button>
           <button id="btn-export-png" class="btn-sm">PNG</button>
+          <button id="btn-generate-brd" class="btn-sm">Экспорт BRD (.docx)</button>
           <span class="toolbar-sep"></span>
           <button id="btn-animate" class="btn-sm btn-animate" title="Анимация токена по процессу">▶ Анимация</button>
           <button id="btn-animate-stop" class="btn-sm" title="Остановить" hidden>■ Стоп</button>
@@ -113,7 +111,6 @@
     </aside>
   </div>
 
-  <script src="https://unpkg.com/bpmn-js@17.11.1/dist/bpmn-modeler.development.js"></script>
   <script src="js/db.js"></script>
   <script src="js/validator.js"></script>
   <script src="js/requirements.js"></script>

@@ -6,7 +6,7 @@
   const modelerControls = [
     "#btn-new", "#btn-load", "#btn-save", "#btn-zoom-out", "#btn-zoom-fit",
     "#btn-zoom-in", "#btn-export-svg", "#btn-export-png", "#btn-animate",
-    "#btn-validate", "#btn-generate", "#btn-export", "#btn-save-project",
+    "#btn-validate", "#btn-generate", "#btn-generate-brd", "#btn-export", "#btn-save-project",
     "#btn-project-save", "#btn-save-doc"
   ];
 
@@ -14,6 +14,40 @@
   let currentProjectId = null;
   let animationTimer = null;
   let activeOverlay = null;
+  let backendRequestSequence = 0;
+  const pendingBackendRequests = new Map();
+
+  window.onBackendResponse = (response) => {
+    const pending = pendingBackendRequests.get(response?.id);
+    if (!pending) return;
+    pendingBackendRequests.delete(response.id);
+    window.clearTimeout(pending.timeout);
+    if (response.ok) pending.resolve(response.result);
+    else pending.reject(new Error(response.error || "Ошибка обработки запроса бэкендом."));
+  };
+
+  window.onBackendError = (message) => setStatus(`Ошибка бэкенда: ${message}`, "error");
+
+  function requestBackend(action, xml) {
+    if (typeof window.invokeCSharpAction !== "function") return Promise.resolve(null);
+
+    const id = `backend-${++backendRequestSequence}`;
+    return new Promise((resolve, reject) => {
+      const timeout = window.setTimeout(() => {
+        pendingBackendRequests.delete(id);
+        reject(new Error("Бэкенд не ответил вовремя."));
+      }, 30000);
+      pendingBackendRequests.set(id, { resolve, reject, timeout });
+
+      try {
+        window.invokeCSharpAction(JSON.stringify({ id, action, xml }));
+      } catch (error) {
+        window.clearTimeout(timeout);
+        pendingBackendRequests.delete(id);
+        reject(error);
+      }
+    });
+  }
 
   function setStatus(message, kind = "info") {
     statusElement.textContent = message;
@@ -62,20 +96,27 @@
   async function ensureBpmnLibrary() {
     if (window.BpmnJS) return;
 
-    const cdn = "https://cdn.jsdelivr.net/npm/bpmn-js@17.11.1/dist/";
-    try {
-      await Promise.all([
-        loadStylesheet(`${cdn}assets/diagram-js.css`),
-        loadStylesheet(`${cdn}assets/bpmn-js.css`),
-        loadStylesheet(`${cdn}assets/bpmn-font/css/bpmn-embedded.css`),
-        loadScript(`${cdn}bpmn-modeler.production.min.js`)
-      ]);
-    } catch (error) {
-      throw new Error(`BPMN-редактор не загрузился с основного и резервного CDN. Проверьте подключение к интернету. ${error.message}`);
+    const cdns = [
+      "https://cdn.jsdelivr.net/npm/bpmn-js@17.11.1/dist/",
+      "https://unpkg.com/bpmn-js@17.11.1/dist/"
+    ];
+    let lastError;
+    for (const cdn of cdns) {
+      try {
+        await Promise.all([
+          loadStylesheet(`${cdn}assets/diagram-js.css`),
+          loadStylesheet(`${cdn}assets/bpmn-js.css`),
+          loadStylesheet(`${cdn}assets/bpmn-font/css/bpmn-embedded.css`),
+          loadScript(`${cdn}bpmn-modeler.production.min.js`)
+        ]);
+        if (window.BpmnJS) return;
+      } catch (error) {
+        lastError = error;
+      }
     }
 
     if (!window.BpmnJS) {
-      throw new Error("Скрипт загружен, но библиотека BPMN-редактора недоступна.");
+      throw new Error(`BPMN-редактор не загрузился с основного и резервного CDN. Проверьте подключение к интернету. ${lastError?.message || ""}`);
     }
   }
 
@@ -217,8 +258,9 @@
     }
   }
 
-  function validateDiagram() {
-    const result = window.BpmnValidation.validate(modeler);
+  async function validateDiagram() {
+    const xml = await saveXml();
+    const result = await requestBackend("validate", xml) || window.BpmnValidation.validate(modeler);
     renderValidation(result);
     const flowCount = result.counts.flows;
     setStatus(result.errors.length
@@ -232,6 +274,14 @@
     $("#notepad").value = window.BpmnRequirements.generate(modeler, docType);
     showTab("notepad");
     setStatus("Текст сформирован по текущей BPMN-схеме.", "success");
+  }
+
+  async function generateBrd() {
+    const result = await requestBackend("generate-brd", await saveXml());
+    if (!result) {
+      throw new Error("Экспорт BRD доступен только в настольном приложении.");
+    }
+    setStatus(`BRD сохранён: ${result.path}`, "success");
   }
 
   async function exportSvg() {
@@ -566,12 +616,13 @@
     $("#btn-export-png").addEventListener("click", () => exportPng().catch((error) => reportError("Не удалось экспортировать PNG", error)));
     $("#btn-animate").addEventListener("click", animateProcess);
     $("#btn-animate-stop").addEventListener("click", stopAnimation);
-    $("#btn-validate").addEventListener("click", () => {
-      try { validateDiagram(); } catch (error) { reportError("Ошибка проверки схемы", error); }
-    });
+    $("#btn-validate").addEventListener("click", () =>
+      validateDiagram().catch((error) => reportError("Ошибка проверки схемы", error)));
     $("#btn-generate").addEventListener("click", () => {
       try { generateDocument(); } catch (error) { reportError("Не удалось сформировать документ", error); }
     });
+    $("#btn-generate-brd").addEventListener("click", () =>
+      generateBrd().catch((error) => reportError("Не удалось сформировать BRD", error)));
     $("#btn-copy").addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText($("#notepad").value);

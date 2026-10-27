@@ -157,11 +157,11 @@ body {
 
 #canvas {
   flex: 1;
-  background: #1e2a3a;
+  background: transparent;
   min-height: 0;
 }
 
-.djs-container { background: #1e2a3a !important; }
+.djs-container { background: transparent !important; }
 .bjs-powered-by { display: none !important; }
 .djs-label,
 .djs-visual text {
