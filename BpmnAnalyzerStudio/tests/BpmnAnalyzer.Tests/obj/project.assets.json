@@ -1146,7 +1146,7 @@
     ]
   },
   "packageFolders": {
-    "/tmp/.nuget/packages/": {}
+    "/Users/alexsnow/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
@@ -1154,11 +1154,11 @@
       "projectUniqueName": "/Users/alexsnow/code/BpmnAnalyzerStudio/tests/BpmnAnalyzer.Tests/BpmnAnalyzer.Tests.csproj",
       "projectName": "BpmnAnalyzer.Tests",
       "projectPath": "/Users/alexsnow/code/BpmnAnalyzerStudio/tests/BpmnAnalyzer.Tests/BpmnAnalyzer.Tests.csproj",
-      "packagesPath": "/tmp/.nuget/packages/",
+      "packagesPath": "/Users/alexsnow/.nuget/packages/",
       "outputPath": "/Users/alexsnow/code/BpmnAnalyzerStudio/tests/BpmnAnalyzer.Tests/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/tmp/.nuget/NuGet/NuGet.Config"
+        "/Users/alexsnow/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"

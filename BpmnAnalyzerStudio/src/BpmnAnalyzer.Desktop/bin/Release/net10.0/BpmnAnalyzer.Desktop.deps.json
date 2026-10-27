@@ -13,7 +13,9 @@
           "Avalonia.Desktop": "12.1.4",
           "Avalonia.Fonts.Inter": "12.1.4",
           "Avalonia.Themes.Fluent": "12.1.4",
+          "BpmnAnalyzer.Application": "1.0.0",
           "BpmnAnalyzer.Core": "1.0.0",
+          "BpmnAnalyzer.Infrastructure": "1.0.0",
           "CommunityToolkit.Mvvm": "8.2.2"
         },
         "runtime": {
@@ -539,13 +541,33 @@
           }
         }
       },
-      "BpmnAnalyzer.Core/1.0.0": {
+      "BpmnAnalyzer.Application/1.0.0": {
         "dependencies": {
+          "BpmnAnalyzer.Core": "1.0.0"
+        },
+        "runtime": {
+          "BpmnAnalyzer.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "BpmnAnalyzer.Core/1.0.0": {
+        "runtime": {
+          "BpmnAnalyzer.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "BpmnAnalyzer.Infrastructure/1.0.0": {
+        "dependencies": {
+          "BpmnAnalyzer.Application": "1.0.0",
           "DocumentFormat.OpenXml": "3.0.2",
           "System.IO.Packaging": "8.0.1"
         },
         "runtime": {
-          "BpmnAnalyzer.Core.dll": {
+          "BpmnAnalyzer.Infrastructure.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -755,7 +777,17 @@
       "path": "tmds.dbus.protocol/0.94.1",
       "hashPath": "tmds.dbus.protocol.0.94.1.nupkg.sha512"
     },
+    "BpmnAnalyzer.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "BpmnAnalyzer.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "BpmnAnalyzer.Infrastructure/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

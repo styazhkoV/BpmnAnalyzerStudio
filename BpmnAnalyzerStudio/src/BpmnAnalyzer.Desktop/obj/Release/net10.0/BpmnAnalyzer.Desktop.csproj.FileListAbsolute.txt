@@ -99,3 +99,7 @@
 /Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/bin/Release/net10.0/Assets/Web/js/db.js
 /Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/bin/Release/net10.0/Assets/Web/js/requirements.js
 /Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/bin/Release/net10.0/Assets/Web/js/validator.js
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/bin/Release/net10.0/BpmnAnalyzer.Application.dll
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/bin/Release/net10.0/BpmnAnalyzer.Infrastructure.dll
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/bin/Release/net10.0/BpmnAnalyzer.Application.pdb
+/Users/alexsnow/code/BpmnAnalyzerStudio/src/BpmnAnalyzer.Desktop/bin/Release/net10.0/BpmnAnalyzer.Infrastructure.pdb

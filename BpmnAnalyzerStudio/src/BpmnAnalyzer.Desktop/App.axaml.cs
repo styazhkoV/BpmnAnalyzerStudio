@@ -26,7 +26,10 @@ public partial class App : Avalonia.Application
                 new BpmnValidator(),
                 new BrdDocxGeneratorAdapter(),
                 new LocalFileStorageAdapter());
-            var viewModel = new MainViewModel();
+            var notebookApplicationService = new NotebookApplicationService(
+                new JsonNoteStorageAdapter(new LocalFileStorageAdapter()),
+                new NoteDocxGeneratorAdapter());
+            var viewModel = new MainViewModel(bpmnApplicationService, notebookApplicationService);
             var mainWindow = new MainWindow();
             mainWindow.Configure(bpmnApplicationService, viewModel);
             desktop.MainWindow = mainWindow;
