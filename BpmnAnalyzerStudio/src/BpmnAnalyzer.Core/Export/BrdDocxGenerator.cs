@@ -16,7 +16,8 @@ public class BrdDocxGenerator
         
         var mainPart = wordDocument.AddMainDocumentPart();
         mainPart.Document = new Document(new Body());
-        var body = mainPart.Document.Body;
+        var body = mainPart.Document.Body
+            ?? throw new InvalidOperationException("Не удалось создать содержимое документа BRD.");
 
         // 1. Заголовок документа
         AddHeading(body, documentTitle, 28, true);

@@ -109,7 +109,8 @@ public partial class NotebookViewModel : ViewModelBase
     [RelayCommand]
     private void ExportToWord()
     {
-        if (SelectedNote == null)
+        var selectedNote = SelectedNote;
+        if (selectedNote == null)
         {
             StatusMessage = "Выберите заметку для экспорта.";
             return;
@@ -118,28 +119,29 @@ public partial class NotebookViewModel : ViewModelBase
         try
         {
             var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var safeTitle = string.Join("_", SelectedNote.Title.Split(Path.GetInvalidFileNameChars()));
+            var safeTitle = string.Join("_", selectedNote.Title.Split(Path.GetInvalidFileNameChars()));
             var filePath = Path.Combine(desktopPath, $"{safeTitle}.docx");
 
             using (var wordDocument = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
             {
                 var mainPart = wordDocument.AddMainDocumentPart();
                 mainPart.Document = new Document(new Body());
-                var body = mainPart.Document.Body;
+                var body = mainPart.Document.Body
+                    ?? throw new InvalidOperationException("Не удалось создать содержимое документа Word.");
 
-                body.AppendChild(new Paragraph(new Run(new Text(SelectedNote.Title))
+                body.AppendChild(new Paragraph(new Run(new Text(selectedNote.Title))
                 {
                     RunProperties = new RunProperties(new Bold(), new FontSize() { Val = "28" })
                 }));
 
-                body.AppendChild(new Paragraph(new Run(new Text($"Дата обновления: {SelectedNote.UpdatedAt:dd.MM.yyyy HH:mm}"))
+                body.AppendChild(new Paragraph(new Run(new Text($"Дата обновления: {selectedNote.UpdatedAt:dd.MM.yyyy HH:mm}"))
                 {
                     RunProperties = new RunProperties(new Italic(), new Color() { Val = "666666" })
                 }));
 
                 body.AppendChild(new Paragraph());
 
-                foreach (var line in SelectedNote.Content.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
+                foreach (var line in selectedNote.Content.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
                 {
                     body.AppendChild(new Paragraph(new Run(new Text(line))));
                 }

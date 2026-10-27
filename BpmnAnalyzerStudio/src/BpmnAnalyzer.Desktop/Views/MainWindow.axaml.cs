@@ -59,7 +59,13 @@ public partial class MainWindow : Window
         string? requestId = null;
         try
         {
-            var request = JsonSerializer.Deserialize<BackendRequest>(e.Body, MessageJsonOptions)
+            var messageBody = e.Body;
+            if (string.IsNullOrWhiteSpace(messageBody))
+            {
+                throw new InvalidOperationException("Получено пустое сообщение от редактора.");
+            }
+
+            var request = JsonSerializer.Deserialize<BackendRequest>(messageBody, MessageJsonOptions)
                 ?? throw new InvalidOperationException("Получен пустой запрос от редактора.");
             requestId = request.Id;
 
